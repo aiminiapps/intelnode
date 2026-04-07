@@ -18,11 +18,10 @@ import {
 } from "react-icons/ri";
 import { NAV_ITEMS } from "@/lib/constants";
 import { useTokens } from "@/context/TokenContext";
-import Image from "next/image";
 
 /* ══════════════════════════════════════════════
    Split nav items into two groups:
-   MAIN = first 3 (Dashboard, Predictions, Analyzer)
+   MAIN = first 3 (Dashboard, Intel Feed, Research)
    TOOLS = rest (Quests, Wallets, Alerts)
    ══════════════════════════════════════════════ */
 const MAIN_NAV = NAV_ITEMS.slice(0, 3);
@@ -48,7 +47,7 @@ export default function Sidebar() {
   }
 
   /* ═══════════════════════════════════════════
-     NAV LINK COMPONENT — 3D style
+     NAV LINK COMPONENT — Light theme
      ═══════════════════════════════════════════ */
   function NavLink({ item, mobile }) {
     const Icon = item.icon;
@@ -63,46 +62,32 @@ export default function Sidebar() {
         <motion.div
           layout
           className={`
-            flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium
-            transition-all duration-300 relative overflow-hidden
+            flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+            transition-all duration-200 relative overflow-hidden
             ${active
-              ? "text-white border-dashed border border-gray-500/30"
-              : "text-[#8E8E9A] hover:text-white "
+              ? "text-[#7C3AED] bg-[rgba(124,58,237,0.06)] border border-[#E5E7EB]"
+              : "text-[#6B7280] hover:text-[#111827] hover:bg-[#F8F9FB]"
             }
           `}
-          style={active ? {
-            background: "linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(159,103,255,0.08) 100%)",
-            boxShadow: `
-              0 1px 0 0 rgba(159,103,255,0.1) inset,
-              0 -1px 0 0 rgba(91,33,182,0.15) inset,
-              0 2px 8px rgba(124,58,237,0.12),
-              0 0 0 1px rgba(124,58,237,0.15)
-            `,
-          } : {}}
-          whileHover={!active ? {
-            backgroundColor: "rgba(28,28,46,0.5)",
-            transition: { duration: 0.2 },
-          } : {}}
           whileTap={{ scale: 0.97 }}
         >
-          {/* Active glow indicator — left edge */}
+          {/* Active indicator — left edge */}
           {active && (
             <motion.div
               layoutId="sidebar-active-glow"
               className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-[#7C3AED]"
-              style={{ boxShadow: "0 0 8px 2px rgba(124,58,237,0.4)" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
             />
           )}
 
-          <Icon className={`text-lg shrink-0 transition-colors duration-200 ${active ? "text-[#9F67FF]" : "group-hover:text-[#9F67FF]"}`} />
+          <Icon className={`text-lg shrink-0 transition-colors duration-200 ${active ? "text-[#7C3AED]" : "group-hover:text-[#7C3AED]"}`} />
           {(!collapsed || mobile) && (
             <span className="truncate">{item.name}</span>
           )}
 
           {/* Collapsed active dot */}
           {collapsed && !mobile && active && (
-            <div className="absolute -right-0.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#7C3AED] shadow-[0_0_6px_rgba(124,58,237,0.6)]" />
+            <div className="absolute -right-0.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#7C3AED]" />
           )}
         </motion.div>
       </Link>
@@ -116,14 +101,26 @@ export default function Sidebar() {
     <div className="flex flex-col h-full">
 
       {/* ─── Logo Bar ─── */}
-      <div className="px-4 py-4 flex items-center justify-between">
+      <div className="px-4 py-5 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <Image src="/logo.png" alt="Logo" width={160} height={50} className="pl-2"/>
+          <div className="w-8 h-8 rounded-lg bg-[#7C3AED] flex items-center justify-center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" opacity="0.9"/>
+              <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          {(!collapsed || mobile) && (
+            <div>
+              <h1 className="text-[#111827] font-bold text-base leading-tight tracking-tight">IntelNode</h1>
+              <p className="text-[#9CA3AF] text-[10px] font-medium leading-tight">Intelligence Hub</p>
+            </div>
+          )}
         </Link>
         {!mobile && (
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden lg:flex w-7 h-7 rounded-lg items-center justify-center text-[#6B6B76] hover:text-white hover:bg-[#1C1C2E] transition-all"
+            className="hidden lg:flex w-7 h-7 rounded-lg items-center justify-center text-[#9CA3AF] hover:text-[#111827] hover:bg-[#F8F9FB] transition-all"
           >
             <motion.div animate={{ rotate: collapsed ? 0 : 180 }} transition={{ duration: 0.3 }}>
               {collapsed ? <RiMenu3Line size={14} /> : <RiCloseLine size={14} className="sm:hidden block" />}
@@ -137,28 +134,28 @@ export default function Sidebar() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="px-4 mb-2"
+          className="px-4 mb-3"
         >
-          <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#0D0D14] border border-[#2A2A3A] text-[#6B6B76] hover:border-[#7C3AED]/20 transition-colors cursor-pointer group">
-            <RiSearchLine className="text-sm shrink-0 group-hover:text-[#9F67FF] transition-colors" />
+          <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#F8F9FB] border border-[#E5E7EB] text-[#9CA3AF] hover:border-[#7C3AED]/20 transition-colors cursor-pointer group">
+            <RiSearchLine className="text-sm shrink-0 group-hover:text-[#7C3AED] transition-colors" />
             <span className="text-xs flex-1">Search</span>
-            <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-[#1C1C2E] text-[#555] font-mono border border-[#2A2A3A]/50">/</kbd>
+            <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-white text-[#9CA3AF] font-mono border border-[#E5E7EB]">/</kbd>
           </div>
         </motion.div>
       )}
 
       {/* Collapsed balance icon */}
       {collapsed && !mobile && (
-        <div className="mx-auto my-2 w-9 h-9 rounded-xl bg-[#7C3AED]/10 flex items-center justify-center" title={`${loaded ? balance : '...'} CORA`}>
-          <RiCoinLine className="text-[#9F67FF] text-sm" />
+        <div className="mx-auto my-2 w-9 h-9 rounded-lg bg-[rgba(124,58,237,0.06)] flex items-center justify-center" title={`${loaded ? balance : '...'} INOD`}>
+          <RiCoinLine className="text-[#7C3AED] text-sm" />
         </div>
       )}
 
       {/* ─── Navigation ─── */}
-      <nav className="flex-1 px-3 overflow-y-auto mt-2">
+      <nav className="flex-1 px-3 overflow-y-auto mt-1">
         {/* MAIN section */}
         {(!collapsed || mobile) && (
-          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#555] px-3 mb-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#9CA3AF] px-3 mb-2">
             Navigation
           </p>
         )}
@@ -169,11 +166,11 @@ export default function Sidebar() {
         </div>
 
         {/* Separator */}
-        <div className={`my-3 ${collapsed && !mobile ? 'mx-2' : 'mx-3'} border-t border-[#2A2A3A]/50`} />
+        <div className={`my-3 ${collapsed && !mobile ? 'mx-2' : 'mx-3'} border-t border-[#E5E7EB]`} />
 
         {/* TOOLS section */}
         {(!collapsed || mobile) && (
-          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#555] px-3 mb-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#9CA3AF] px-3 mb-2">
             Tools
           </p>
         )}
@@ -184,7 +181,7 @@ export default function Sidebar() {
         </div>
       </nav>
 
-      {/* ─── PROJECT INFO CARD (above disconnect) ─── */}
+      {/* ─── PROJECT INFO CARD ─── */}
       {(!collapsed || mobile) && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -192,52 +189,38 @@ export default function Sidebar() {
           transition={{ delay: 0.2 }}
           className="mx-3 mb-2"
         >
-          <div className="relative rounded-sm overflow-hidden p-4  border-dashed border border-gray-500/30"
-            style={{
-              background: "linear-gradient(145deg, rgba(124,58,237,0.25) 0%, rgba(88,28,195,0.15) 40%, rgba(30,20,60,0.9) 100%)",
-            }}
-          >
-            {/* Decorative glow orbs */}
-            <div className="absolute -top-6 -right-6 w-20 h-20 bg-[#7C3AED]/20 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-[#9F67FF]/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="relative rounded-lg overflow-hidden p-4 border border-[#E5E7EB] bg-white">
+            {/* Crosshatch pattern accent at top */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:6px_6px]" style={{ '--pattern-fg': 'rgba(124,58,237,0.12)' }} />
 
             {/* Logo + Title */}
-            <div className="relative z-10 ">
+            <div className="relative z-10">
               <div className="flex items-center gap-2.5 mb-2">
-                <Image src="/agent.png" alt="Logo" width={32} height={32} />
+                <div className="w-8 h-8 rounded-lg bg-[#7C3AED] flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" opacity="0.9"/>
+                    <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
                 <div>
-                  <h4 className="text-white font-bold text-sm leading-tight">ChainOracle</h4>
-                  <p className="text-[#B8B8CC] text-[10px] leading-tight">$CORA</p>
+                  <h4 className="text-[#111827] font-bold text-sm leading-tight">IntelNode</h4>
+                  <p className="text-[#9CA3AF] text-[10px] leading-tight">$INOD</p>
                 </div>
               </div>
 
               {/* Description */}
-              <p className="text-[#A1A1B5] text-[11px] leading-relaxed mb-3">
-                AI-powered predictive analytics for DeFi alpha.
+              <p className="text-[#6B7280] text-[11px] leading-relaxed mb-3">
+                Crypto intelligence hub — institution-grade research & analytics.
               </p>
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2">
                 <a
-                  href="https://x.com/aichainoracle"
+                  href="https://x.com/intelnode"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-semibold text-white transition-all duration-200"
-                  style={{
-                    background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 100%)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    boxShadow: "0 1px 2px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.05) inset",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 100%)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-                    e.currentTarget.style.transform = "translateY(0)";
-                  }}
+                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-semibold text-[#111827] bg-[#F8F9FB] border border-[#E5E7EB] hover:border-[#7C3AED]/30 hover:text-[#7C3AED] transition-all duration-200"
                 >
                   <RiTwitterXLine className="text-xs" />
                   Follow
@@ -246,20 +229,7 @@ export default function Sidebar() {
                   href="https://bscscan.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-semibold transition-all duration-200"
-                  style={{
-                    background: "linear-gradient(180deg, #9F67FF 0%, #7C3AED 100%)",
-                    color: "#fff",
-                    boxShadow: "0 2px 0 0 #5B21B6, 0 2px 6px rgba(124,58,237,0.3), 0 1px 0 rgba(159,103,255,0.3) inset",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                    e.currentTarget.style.boxShadow = "0 3px 0 0 #5B21B6, 0 3px 10px rgba(124,58,237,0.4), 0 1px 0 rgba(159,103,255,0.4) inset";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = "0 2px 0 0 #5B21B6, 0 2px 6px rgba(124,58,237,0.3), 0 1px 0 rgba(159,103,255,0.3) inset";
-                  }}
+                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-semibold text-white bg-[#7C3AED] hover:bg-[#6D28D9] transition-all duration-200"
                 >
                   <RiGlobalLine className="text-xs" />
                   BSCScan
@@ -275,19 +245,9 @@ export default function Sidebar() {
       <div className="px-3 pb-3 pt-1">
         <button
           onClick={handleDisconnect}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#8E8E9A] hover:text-[#EF4444] transition-all text-sm font-medium w-full group
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#9CA3AF] hover:text-[#DC2626] hover:bg-[#DC2626]/5 transition-all text-sm font-medium w-full group
             ${collapsed && !mobile ? 'justify-center' : ''}
           `}
-          style={{
-            background: "transparent",
-            transition: "all 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "rgba(239,68,68,0.06)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-          }}
         >
           <RiLogoutBoxRLine className="text-lg shrink-0 group-hover:rotate-12 transition-transform duration-300" />
           {(!collapsed || mobile) && <span>Disconnect</span>}
@@ -302,7 +262,7 @@ export default function Sidebar() {
       <motion.aside
         animate={{ width: collapsed ? 72 : 260 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="hidden lg:flex flex-col bg-[#0A0A0F] h-screen sticky top-0 overflow-hidden border-r border-[#1E1E2E]"
+        className="hidden lg:flex flex-col bg-white h-screen sticky top-0 overflow-hidden border-r border-[#E5E7EB]"
       >
         <SidebarContent />
       </motion.aside>
@@ -310,7 +270,7 @@ export default function Sidebar() {
       {/* Mobile toggle */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 rounded-xl bg-[#141420]/90 backdrop-blur-md border border-[#2A2A3A] flex items-center justify-center text-white shadow-lg shadow-black/30"
+        className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 rounded-xl bg-white/90 backdrop-blur-md border border-[#E5E7EB] flex items-center justify-center text-[#111827] shadow-sm"
       >
         <RiMenu3Line size={18} />
       </button>
@@ -325,18 +285,18 @@ export default function Sidebar() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               onClick={() => setMobileOpen(false)}
-              className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+              className="lg:hidden fixed inset-0 z-50 bg-black/20 backdrop-blur-sm"
             />
             <motion.aside
               initial={{ x: -280, opacity: 0.5 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -280, opacity: 0 }}
               transition={{ type: "spring", damping: 28, stiffness: 320 }}
-              className="lg:hidden fixed left-0 top-0 bottom-0 z-50 w-[270px] bg-[#0A0A0F] border-r border-[#1E1E2E] shadow-2xl shadow-black/50"
+              className="lg:hidden fixed left-0 top-0 bottom-0 z-50 w-[270px] bg-white border-r border-[#E5E7EB] shadow-xl"
             >
               <button
                 onClick={() => setMobileOpen(false)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-lg bg-[#1C1C2E] flex items-center justify-center text-[#A1A1AA] hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 w-8 h-8 rounded-lg bg-[#F8F9FB] flex items-center justify-center text-[#6B7280] hover:text-[#111827] transition-colors z-10"
               >
                 <RiCloseLine size={18} />
               </button>

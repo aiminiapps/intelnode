@@ -6,16 +6,16 @@ import { useAccount } from "wagmi";
 const TokenContext = createContext(null);
 
 const STORAGE_KEYS = {
-  balance: "cora_balance",
-  history: "cora_history",
-  quests: "cora_completed_quests",
-  analyzed: "cora_analyzed_tokens",
-  trackedWallets: "cora_tracked_wallets",
-  alertSettings: "cora_alert_settings",
-  watchlist: "cora_watchlist",
+  balance: "inod_balance",
+  history: "inod_history",
+  quests: "inod_completed_quests",
+  analyzed: "inod_analyzed_tokens",
+  trackedWallets: "inod_tracked_wallets",
+  alertSettings: "inod_alert_settings",
+  watchlist: "inod_watchlist",
 };
 
-const INITIAL_BALANCE = 500; // new users start with 500 CORA
+const INITIAL_BALANCE = 500; // new users start with 500 INOD
 
 function loadFromStorage(key, fallback) {
   if (typeof window === "undefined") return fallback;
@@ -68,19 +68,16 @@ export function TokenProvider({ children }) {
     if (!loaded) return;
     if (isConnected && address) {
       const storedBalance = loadFromStorage(STORAGE_KEYS.balance, null);
-      const hasInitialized = loadFromStorage("cora_wallet_initialized", false);
+      const hasInitialized = loadFromStorage("inod_wallet_initialized", false);
       if (hasInitialized) {
-        // Returning user — restore their balance
         setBalance(storedBalance !== null ? storedBalance : INITIAL_BALANCE);
       } else {
-        // First time connecting — grant initial tokens
         setBalance(INITIAL_BALANCE);
         saveToStorage(STORAGE_KEYS.balance, INITIAL_BALANCE);
-        saveToStorage("cora_wallet_initialized", true);
+        saveToStorage("inod_wallet_initialized", true);
       }
       setWalletInitialized(true);
     } else {
-      // Wallet disconnected — show 0
       setBalance(0);
       setWalletInitialized(false);
     }
@@ -124,7 +121,7 @@ export function TokenProvider({ children }) {
 
   const addHistoryEntry = useCallback((type, amount, reason) => {
     const entry = { type, amount, reason, timestamp: Date.now() };
-    setHistory((prev) => [entry, ...prev].slice(0, 100)); // keep last 100
+    setHistory((prev) => [entry, ...prev].slice(0, 100));
   }, []);
 
   const earnTokens = useCallback((amount, reason) => {
@@ -156,7 +153,6 @@ export function TokenProvider({ children }) {
   const getCachedAnalysis = useCallback((tokenKey) => {
     const cached = analyzedTokens[tokenKey];
     if (!cached) return null;
-    // cache valid for 1 hour
     if (Date.now() - cached.cachedAt > 3600000) return null;
     return cached;
   }, [analyzedTokens]);

@@ -1,12 +1,13 @@
 import { 
   RiDashboardLine, RiSearchEyeLine, RiVipDiamondLine, RiTaskLine, 
-  RiWallet3Line, RiNotification3Line, RiEyeLine, RiLineChartLine
+  RiWallet3Line, RiNotification3Line, RiEyeLine, RiLineChartLine,
+  RiFileTextLine, RiShieldCheckLine
 } from "react-icons/ri";
 
 export const NAV_ITEMS = [
   { name: "Dashboard", href: "/app", icon: RiDashboardLine },
-  { name: "Predictions", href: "/app/gems", icon: RiLineChartLine },
-  { name: "Analyzer", href: "/app/analyzer", icon: RiSearchEyeLine },
+  { name: "Intel Feed", href: "/app/gems", icon: RiLineChartLine },
+  { name: "Research", href: "/app/analyzer", icon: RiSearchEyeLine },
   { name: "Quests", href: "/app/quests", icon: RiTaskLine },
   { name: "Wallets", href: "/app/wallets", icon: RiWallet3Line },
   { name: "Alerts", href: "/app/alerts", icon: RiNotification3Line },
@@ -15,7 +16,7 @@ export const NAV_ITEMS = [
 export const QUEST_CATEGORIES = ["All", "Social", "Platform", "Community"];
 
 export const ALERT_TYPES = {
-  WHALE_BUY: { label: "Whale Buy", color: "#22C55E" },
+  WHALE_BUY: { label: "Whale Buy", color: "#16A34A" },
   LIQUIDITY_SPIKE: { label: "Liquidity Spike", color: "#3B82F6" },
   VOLUME_SURGE: { label: "Volume Surge", color: "#F97316" },
   SMART_MONEY: { label: "Smart Money", color: "#7C3AED" },
@@ -31,9 +32,9 @@ export const CHAIN_BADGES = {
 };
 
 export const PREDICTION_CATEGORIES = [
-  "Best of Week",
-  "Best of Month",
-  "Rising Stars",
-  "Whale Picks",
+  "Top Intel",
+  "Accumulation Phase",
+  "Rising Narratives",
+  "High Volatility",
   "AI Forecast",
 ];
