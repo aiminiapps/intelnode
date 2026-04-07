@@ -70,7 +70,7 @@ export default function Sidebar() {
         <motion.div
           layout
           className={`
-            flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium
+            flex items-center gap-3 px-3 py-2.5 rounded-sm text-[13px] font-medium
             transition-all duration-200 relative overflow-hidden
             ${active
               ? "text-[#111827] bg-[#F8F9FB] border border-[#E5E7EB]"
@@ -85,15 +85,6 @@ export default function Sidebar() {
               className="absolute inset-0 opacity-[0.35] pointer-events-none"
               color="rgba(0,0,0,0.045)"
               size="8px"
-            />
-          )}
-
-          {/* Active left bar — solid black */}
-          {active && (
-            <motion.div
-              layoutId="sidebar-active-bar"
-              className="absolute left-0 top-[20%] bottom-[20%] w-[3px] rounded-r-full bg-[#111827]"
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
             />
           )}
 
@@ -114,7 +105,7 @@ export default function Sidebar() {
 
           {/* Collapsed active dot */}
           {collapsed && !mobile && active && (
-            <div className="absolute -right-0.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#111827]" />
+            <div className="absolute hidden -right-0.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#111827]" />
           )}
         </motion.div>
       </Link>
@@ -138,7 +129,7 @@ export default function Sidebar() {
       <div className="px-4 pt-5 pb-4 flex items-center justify-between relative">
         <Link href="/" className="flex items-center gap-2.5 group">
           {/* Logo mark — black with crosshatch texture */}
-          <div className="w-9 h-9 rounded-lg bg-[#111827] flex items-center justify-center relative overflow-hidden shadow-sm">
+          <div className="w-9 h-9 rounded-sm bg-[#111827] flex items-center justify-center relative overflow-hidden shadow-sm">
             {/* Subtle crosshatch on logo bg */}
             <CrosshatchStrip
               className="absolute inset-0 opacity-20 pointer-events-none"
@@ -186,7 +177,7 @@ export default function Sidebar() {
           animate={{ opacity: 1 }}
           className="px-4 mb-4"
         >
-          <div className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-[#FAFBFC] border border-[#E5E7EB] relative overflow-hidden">
+          <div className="flex items-center justify-between px-3 py-2.5 rounded-sm bg-[#FAFBFC] border border-[#E5E7EB] relative overflow-hidden">
             {/* Pattern accent on balance card */}
             <CrosshatchStrip
               className="absolute right-0 top-0 bottom-0 w-10 opacity-30 pointer-events-none"
@@ -211,7 +202,7 @@ export default function Sidebar() {
 
       {/* Collapsed balance icon */}
       {collapsed && !mobile && (
-        <div className="mx-auto my-2 w-9 h-9 rounded-lg bg-[#111827] flex items-center justify-center" title={`${loaded ? balance : '...'} INOD`}>
+        <div className="mx-auto my-2 w-9 h-9 rounded-sm bg-[#111827] flex items-center justify-center" title={`${loaded ? balance : '...'} INOD`}>
           <RiCoinLine className="text-white text-sm" />
         </div>
       )}
@@ -266,7 +257,7 @@ export default function Sidebar() {
           transition={{ delay: 0.2 }}
           className="mx-3 mb-2"
         >
-          <div className="relative rounded-lg overflow-hidden bg-[#111827] p-4">
+          <div className="relative rounded-sm overflow-hidden bg-[#111827] p-4">
             {/* ── Full crosshatch pattern overlay on dark card ── */}
             <CrosshatchStrip
               className="absolute inset-0 opacity-[0.08] pointer-events-none"
@@ -332,7 +323,7 @@ export default function Sidebar() {
         </div>
         <button
           onClick={handleDisconnect}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#9CA3AF] hover:text-[#DC2626] hover:bg-[#FEF2F2] transition-all text-[13px] font-medium w-full group
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-[#9CA3AF] hover:text-[#DC2626] hover:bg-[#FEF2F2] transition-all text-[13px] font-medium w-full group
             ${collapsed && !mobile ? 'justify-center' : ''}
           `}
         >
@@ -383,7 +374,7 @@ export default function Sidebar() {
             >
               <button
                 onClick={() => setMobileOpen(false)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-lg bg-[#F3F4F6] flex items-center justify-center text-[#6B7280] hover:text-[#111827] transition-colors z-10"
+                className="absolute top-4 right-4 w-8 h-8 rounded-sm bg-[#F3F4F6] flex items-center justify-center text-[#6B7280] hover:text-[#111827] transition-colors z-10"
               >
                 <RiCloseLine size={18} />
               </button>
