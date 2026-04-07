@@ -41,21 +41,21 @@ export default function Topbar() {
             <input
               type="text"
               placeholder="Search tokens, wallets..."
-              className="w-full pl-9 pr-4 py-2 rounded-lg bg-[#F8F9FB] border border-[#E5E7EB] text-[#111827] text-sm placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#7C3AED]/50 transition-colors"
+              className="w-full pl-9 pr-4 py-2 rounded-lg bg-[#F8F9FB] border border-[#E5E7EB] text-[#111827] text-sm placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#111827]/30 transition-colors"
             />
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-[rgba(124,58,237,0.04)] border border-[#E5E7EB]">
-            <RiCoinLine className="text-[#7C3AED] text-sm" />
-            <span className="text-[#7C3AED] font-semibold text-sm">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-[#F3F4F6] border border-[#E5E7EB]">
+            <RiCoinLine className="text-[#111827] text-sm" />
+            <span className="text-[#111827] font-semibold text-sm">
               {loaded ? balance.toLocaleString() : "..."}
             </span>
             <span className="text-[#9CA3AF] text-xs">INOD</span>
           </div>
 
-          <button className="relative w-9 h-9 rounded-lg bg-[#F8F9FB] border border-[#E5E7EB] flex items-center justify-center text-[#6B7280] hover:text-[#111827] hover:border-[#7C3AED]/30 transition-colors">
+          <button className="relative w-9 h-9 rounded-lg bg-[#F8F9FB] border border-[#E5E7EB] flex items-center justify-center text-[#6B7280] hover:text-[#111827] hover:border-[#111827]/30 transition-colors">
             <RiNotification3Line className="text-sm" />
           </button>
 
@@ -70,9 +70,9 @@ export default function Topbar() {
                       {/* Wallet button */}
                       <button
                         onClick={() => setDropdownOpen(!dropdownOpen)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-[#E5E7EB] hover:border-[#7C3AED]/30 transition-colors"
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-[#E5E7EB] hover:border-[#111827]/30 transition-colors"
                       >
-                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#9F67FF]" />
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#111827] to-[#374151]" />
                         <span className="text-[#111827] text-sm font-medium hidden sm:block">{account.displayName}</span>
                         <RiArrowDownSLine className={`text-[#9CA3AF] text-sm transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
                       </button>
