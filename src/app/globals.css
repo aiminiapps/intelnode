@@ -46,13 +46,13 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
   /* IntelNode Light Theme Tokens */
-  --color-intel: #7C3AED;
-  --color-intel-dim: rgba(124,58,237,0.08);
-  --color-intel-hover: #6D28D9;
+  --color-intel: #111827;
+  --color-intel-dim: rgba(17,24,39,0.06);
+  --color-intel-hover: #374151;
   --color-surface: #F8F9FB;
   --color-surface-light: #FFFFFF;
   --color-border-subtle: #E5E7EB;
-  --pattern-fg: rgba(124,58,237,0.07);
+  --pattern-fg: rgba(17,24,39,0.06);
 }
 
 :root {
@@ -184,7 +184,7 @@ body {
    BUTTON SYSTEM — IntelNode (Light)
    ═══════════════════════════════════════════ */
 
-/* Primary Button — Intel Purple */
+/* Primary Button — Intel Black */
 .btn-intel {
   position: relative;
   display: inline-flex;
@@ -195,27 +195,27 @@ body {
   font-weight: 600;
   font-size: 0.875rem;
   color: #FFFFFF;
-  background: #7C3AED;
+  background: #111827;
   border: none;
   border-radius: 0.625rem;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow:
-    0 1px 2px rgba(124,58,237,0.2),
-    0 2px 8px rgba(124,58,237,0.12);
+    0 1px 2px rgba(17,24,39,0.2),
+    0 2px 8px rgba(17,24,39,0.12);
 }
 
 .btn-intel:hover {
-  background: #6D28D9;
+  background: #374151;
   transform: translateY(-1px);
   box-shadow:
-    0 2px 4px rgba(124,58,237,0.25),
-    0 4px 12px rgba(124,58,237,0.15);
+    0 2px 4px rgba(17,24,39,0.25),
+    0 4px 12px rgba(17,24,39,0.15);
 }
 
 .btn-intel:active {
   transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(124,58,237,0.2);
+  box-shadow: 0 1px 2px rgba(17,24,39,0.2);
 }
 
 /* Secondary Button — Ghost */
@@ -237,9 +237,9 @@ body {
 }
 
 .btn-intel-ghost:hover {
-  border-color: #7C3AED;
-  color: #7C3AED;
-  background: rgba(124,58,237,0.04);
+  border-color: #111827;
+  color: #111827;
+  background: rgba(17,24,39,0.04);
 }
 
 /* Small Button */

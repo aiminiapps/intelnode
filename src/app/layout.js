@@ -9,25 +9,25 @@ const inter = Inter({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://www.chain-oracle.com"),
-  title: "ChainOracle ($CORA) — AI Predictive Analytics",
-  description: "Predict the next trending crypto before everyone else. AI-powered forecasting, curated alpha feeds, personalized watchlists, and real-time signal intelligence.",
-  keywords: ["crypto", "AI", "predictive analytics", "blockchain", "DeFi", "forecast", "CORA", "ChainOracle", "token prediction"],
+  metadataBase: new URL("https://www.intelnode.io"),
+  title: "IntelNode ($INOD) — Crypto Intelligence Hub",
+  description: "A comprehensive crypto intelligence hub providing automated, institution-grade research reports on various crypto projects. Powered by AI-driven analytics and gated by the $INOD token ecosystem.",
+  keywords: ["crypto", "AI", "intelligence", "blockchain", "DeFi", "research", "INOD", "IntelNode", "token analytics"],
   icons: {
     icon: "/agent.png",
     apple: "/agent.png",
   },
   openGraph: {
-    title: "ChainOracle ($CORA) — AI Predictive Analytics",
-    description: "Predict the next trending crypto before everyone else with AI-powered forecasting and signal intelligence.",
-    url: "https://www.chain-oracle.com",
-    siteName: "ChainOracle",
+    title: "IntelNode ($INOD) — Crypto Intelligence Hub",
+    description: "Institution-grade crypto research powered by AI. Automated analytics, signal intelligence, and gated research reports.",
+    url: "https://www.intelnode.io",
+    siteName: "IntelNode",
     images: [
       {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "ChainOracle Predictive Engine",
+        alt: "IntelNode Intelligence Engine",
       },
     ],
     locale: "en_US",
@@ -35,14 +35,14 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ChainOracle ($CORA) — AI Predictive Analytics",
-    description: "Predict the next trending crypto before everyone else with AI-powered forecasting and signal intelligence.",
-    creator: "@aichainoracle",
-    site: "@aichainoracle",
+    title: "IntelNode ($INOD) — Crypto Intelligence Hub",
+    description: "Institution-grade crypto research powered by AI. Automated analytics, signal intelligence, and gated research reports.",
+    creator: "@intelnode",
+    site: "@intelnode",
     images: ["/og.png"],
   },
   alternates: {
-    canonical: "https://www.chain-oracle.com",
+    canonical: "https://www.intelnode.io",
   },
 };
 
@@ -51,23 +51,22 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.chain-oracle.com/#organization",
-      name: "ChainOracle",
-      url: "https://www.chain-oracle.com",
-      logo: "https://www.chain-oracle.com/agent.png",
+      "@id": "https://www.intelnode.io/#organization",
+      name: "IntelNode",
+      url: "https://www.intelnode.io",
+      logo: "https://www.intelnode.io/agent.png",
       sameAs: [
-        "https://x.com/aichainoracle",
-        "https://chain-oracle.gitbook.io/chain-oracle-docs"
+        "https://x.com/intelnode",
       ]
     },
     {
       "@type": "WebSite",
-      "@id": "https://www.chain-oracle.com/#website",
-      url: "https://www.chain-oracle.com",
-      name: "ChainOracle ($CORA) — AI Predictive Analytics",
-      description: "Predict the next trending crypto before everyone else with AI-powered forecasting and signal intelligence.",
+      "@id": "https://www.intelnode.io/#website",
+      url: "https://www.intelnode.io",
+      name: "IntelNode ($INOD) — Crypto Intelligence Hub",
+      description: "A comprehensive crypto intelligence hub providing automated, institution-grade research reports powered by AI analytics.",
       publisher: {
-        "@id": "https://www.chain-oracle.com/#organization"
+        "@id": "https://www.intelnode.io/#organization"
       }
     }
   ]
@@ -75,14 +74,14 @@ const jsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${inter.variable} antialiased`} style={{ backgroundColor: "#0A0A0F" }}>
+      <body className={`${inter.variable} antialiased`} style={{ backgroundColor: "#FFFFFF" }}>
         <Web3Provider>
           {children}
         </Web3Provider>
@@ -90,3 +89,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
