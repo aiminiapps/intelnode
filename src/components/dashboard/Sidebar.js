@@ -19,7 +19,8 @@ import { NAV_ITEMS } from "@/lib/constants";
 import { useTokens } from "@/context/TokenContext";
 
 const MAIN_NAV = NAV_ITEMS.slice(0, 3);
-const TOOLS_NAV = NAV_ITEMS.slice(3);
+const ADVANCED_NAV = NAV_ITEMS.slice(3, 6);
+const TOOLS_NAV = NAV_ITEMS.slice(6);
 
 /* ═══════════════════════════════════════════
    Inline SVG pattern as a reusable component
@@ -213,7 +214,7 @@ export default function Sidebar() {
         {(!collapsed || mobile) && (
           <div className="flex items-center gap-2 px-3 mb-2">
             <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#9CA3AF]">
-              Navigation
+              Intelligence
             </p>
             <div className="flex-1 h-px bg-[#E5E7EB]" />
           </div>
@@ -225,7 +226,31 @@ export default function Sidebar() {
         </div>
 
         {/* ── Crosshatch separator ── */}
-        <div className={`my-4 ${collapsed && !mobile ? 'mx-1' : 'mx-2'}`}>
+        <div className={`my-3 ${collapsed && !mobile ? 'mx-1' : 'mx-2'}`}>
+          <CrosshatchStrip
+            className="h-[5px] rounded-sm"
+            color="rgba(0,0,0,0.035)"
+            size="6px"
+          />
+        </div>
+
+        {/* ADVANCED section */}
+        {(!collapsed || mobile) && (
+          <div className="flex items-center gap-2 px-3 mb-2">
+            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#9CA3AF]">
+              Advanced
+            </p>
+            <div className="flex-1 h-px bg-[#E5E7EB]" />
+          </div>
+        )}
+        <div className="space-y-1">
+          {ADVANCED_NAV.map((item) => (
+            <NavLink key={item.name} item={item} mobile={mobile} />
+          ))}
+        </div>
+
+        {/* ── Crosshatch separator ── */}
+        <div className={`my-3 ${collapsed && !mobile ? 'mx-1' : 'mx-2'}`}>
           <CrosshatchStrip
             className="h-[5px] rounded-sm"
             color="rgba(0,0,0,0.035)"

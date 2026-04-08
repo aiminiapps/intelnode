@@ -3,11 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useDisconnect } from "wagmi";
-import { RiSearchLine, RiNotification3Line, RiCoinLine, RiFileCopyLine, RiCheckLine, RiLogoutBoxRLine, RiWallet3Line, RiArrowDownSLine } from "react-icons/ri";
+import { RiSearchLine, RiNotification3Line, RiCoinLine, RiFileCopyLine, RiCheckLine, RiLogoutBoxRLine, RiWallet3Line, RiArrowDownSLine, RiVipCrownLine } from "react-icons/ri";
 import { useTokens } from "@/context/TokenContext";
 
 export default function Topbar() {
-  const { balance, loaded } = useTokens();
+  const { balance, loaded, tier } = useTokens();
   const { disconnect } = useDisconnect();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -53,6 +53,11 @@ export default function Topbar() {
               {loaded ? balance.toLocaleString() : "..."}
             </span>
             <span className="text-[#9CA3AF] text-xs">INOD</span>
+            {loaded && tier && (
+              <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-widest border ${tier.id === 'INSTITUTIONAL' ? 'bg-[#111827] text-white border-[#111827]' : tier.id === 'PRO' ? 'bg-[#111827]/5 text-[#111827] border-[#111827]/15' : 'bg-[#F8F9FB] text-[#9CA3AF] border-[#E5E7EB]'}`}>
+                {tier.icon} {tier.name}
+              </span>
+            )}
           </div>
 
           <button className="relative w-9 h-9 rounded-lg bg-[#F8F9FB] border border-[#E5E7EB] flex items-center justify-center text-[#6B7280] hover:text-[#111827] hover:border-[#111827]/30 transition-colors">
