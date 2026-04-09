@@ -8,7 +8,7 @@ import {
   RiSearchLine, RiInformationLine
 } from "react-icons/ri";
 import { useTokens } from "@/context/TokenContext";
-import TierGate from "@/components/dashboard/TierGate";
+
 
 function CrosshatchStrip({ className = "", color = "rgba(0,0,0,0.06)", size = "7px" }) {
   return <div className={className} style={{ backgroundImage: `repeating-linear-gradient(315deg, ${color} 0, ${color} 1px, transparent 0, transparent 50%)`, backgroundSize: `${size} ${size}` }} />;
@@ -307,9 +307,5 @@ export default function FlowPage() {
     </div>
   );
 
-  return (
-    <TierGate requiredTier="INSTITUTIONAL" featureName="Whale Flow Visualizer">
-      {content}
-    </TierGate>
-  );
+  return content;
 }

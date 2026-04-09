@@ -9,7 +9,7 @@ import {
   RiTimeLine, RiGlobalLine, RiExternalLinkLine
 } from "react-icons/ri";
 import { useTokens } from "@/context/TokenContext";
-import TierGate from "@/components/dashboard/TierGate";
+
 import { getTrendingTokens, searchTokens, formatPairData, formatCurrency, getChainLabel } from "@/lib/dexscreener";
 
 function CrosshatchStrip({ className = "", color = "rgba(0,0,0,0.06)", size = "7px" }) {
@@ -261,9 +261,5 @@ export default function SentimentPage() {
     </div>
   );
 
-  return (
-    <TierGate requiredTier="PRO" featureName="Sentiment Intelligence Matrix">
-      {content}
-    </TierGate>
-  );
+  return content;
 }

@@ -10,7 +10,7 @@ import {
   RiShieldCheckLine
 } from "react-icons/ri";
 import { useTokens } from "@/context/TokenContext";
-import TierGate from "@/components/dashboard/TierGate";
+
 import { searchTokens, formatPairData, formatCurrency, getChainLabel } from "@/lib/dexscreener";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 
@@ -266,9 +266,5 @@ export default function PortfolioPage() {
     </div>
   );
 
-  return (
-    <TierGate requiredTier="INSTITUTIONAL" featureName="AI Portfolio Autopilot">
-      {content}
-    </TierGate>
-  );
+  return content;
 }
