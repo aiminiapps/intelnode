@@ -67,9 +67,18 @@ export function TokenProvider({ children }) {
   });
   const [loaded, setLoaded] = useState(false);
   const [walletInitialized, setWalletInitialized] = useState(false);
+  const [isLocalhost, setIsLocalhost] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+      setIsLocalhost(true);
+    }
+  }, []);
+
+  const effectiveBalance = isLocalhost ? 9999999 : balance;
 
   // Derived tier
-  const tier = useMemo(() => getTier(balance), [balance]);
+  const tier = useMemo(() => getTier(effectiveBalance), [effectiveBalance]);
   const nextTier = useMemo(() => getNextTier(tier), [tier]);
 
   useEffect(() => {
@@ -104,7 +113,7 @@ export function TokenProvider({ children }) {
     }
   }, [isConnected, address, loaded]);
 
-  useEffect(() => { if (loaded) saveToStorage(STORAGE_KEYS.balance, balance); }, [balance, loaded]);
+  useEffect(() => { if (loaded && !isLocalhost) saveToStorage(STORAGE_KEYS.balance, balance); }, [balance, loaded, isLocalhost]);
   useEffect(() => { if (loaded) saveToStorage(STORAGE_KEYS.history, history); }, [history, loaded]);
   useEffect(() => { if (loaded) saveToStorage(STORAGE_KEYS.quests, completedQuests); }, [completedQuests, loaded]);
   useEffect(() => { if (loaded) saveToStorage(STORAGE_KEYS.analyzed, analyzedTokens); }, [analyzedTokens, loaded]);
@@ -124,11 +133,15 @@ export function TokenProvider({ children }) {
   }, [addHistoryEntry]);
 
   const spendTokens = useCallback((amount, reason) => {
+    if (isLocalhost) {
+      addHistoryEntry("spend", amount, reason + " (Localhost Free)");
+      return true;
+    }
     if (balance < amount) return false;
     setBalance((prev) => prev - amount);
     addHistoryEntry("spend", amount, reason);
     return true;
-  }, [balance, addHistoryEntry]);
+  }, [balance, isLocalhost, addHistoryEntry]);
 
   const completeQuest = useCallback((questId, reward) => {
     if (completedQuests.includes(questId)) return false;
@@ -186,7 +199,7 @@ export function TokenProvider({ children }) {
   }, []);
 
   const value = {
-    balance, history, completedQuests, analyzedTokens, trackedWallets,
+    balance: effectiveBalance, history, completedQuests, analyzedTokens, trackedWallets,
     watchlist, alertSettings, loaded, isConnected, walletInitialized,
     tier, nextTier,
     portfolio,
