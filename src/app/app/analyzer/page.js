@@ -21,17 +21,21 @@ import { searchTokens, getTrendingTokens, formatPairData, formatCurrency, format
 import InsufficientTokensModal from "@/components/dashboard/InsufficientTokensModal";
 
 const AI_REPORT_COST = 200;
-const RISK_COLORS = { LOW: "#16A34A", MEDIUM: "#7C3AED", HIGH: "#F97316", CRITICAL: "#DC2626" };
-const REC_COLORS = { STRONG_BUY: "#16A34A", BUY: "#16A34A", HOLD: "#7C3AED", CAUTION: "#F97316", AVOID: "#DC2626" };
+const RISK_COLORS = { LOW: "#16A34A", MEDIUM: "#3B82F6", HIGH: "#F97316", CRITICAL: "#DC2626" };
+const REC_COLORS = { STRONG_BUY: "#16A34A", BUY: "#16A34A", HOLD: "#3B82F6", CAUTION: "#F97316", AVOID: "#DC2626" };
 
-const CARD = "rounded-xl border border-[#E5E7EB] bg-white relative overflow-hidden";
-const CARD_INNER = "rounded-lg border border-[#E5E7EB] bg-[#F8F9FB]";
+const CARD = "rounded-2xl border border-[#E5E7EB] bg-white relative overflow-hidden transition-all hover:border-[#D1D5DB] hover:shadow-sm";
+const CARD_INNER = "rounded-xl border border-[#E5E7EB] bg-[#FAFBFC]";
+
+function CrosshatchStrip({ className = "", color = "rgba(0,0,0,0.06)", size = "7px" }) {
+  return <div className={className} style={{ backgroundImage: `repeating-linear-gradient(315deg, ${color} 0, ${color} 1px, transparent 0, transparent 50%)`, backgroundSize: `${size} ${size}` }} />;
+}
 
 function renderInline(text) {
   return text.split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g).map((part, i) => {
-    if (part.startsWith("**") && part.endsWith("**")) return <strong key={i} className="text-[#111827] font-semibold">{part.slice(2, -2)}</strong>;
+    if (part.startsWith("**") && part.endsWith("**")) return <strong key={i} className="text-[#111827] font-medium">{part.slice(2, -2)}</strong>;
     if (part.startsWith("*") && part.endsWith("*")) return <em key={i} className="text-[#6B7280] italic">{part.slice(1, -1)}</em>;
-    if (part.startsWith("`") && part.endsWith("`")) return <code key={i} className="px-1.5 py-0.5 rounded bg-[#F3F4F6] text-[#7C3AED] text-xs font-mono">{part.slice(1, -1)}</code>;
+    if (part.startsWith("`") && part.endsWith("`")) return <code key={i} className="px-1.5 py-0.5 rounded border border-[#E5E7EB] bg-[#FAFBFC] text-[#111827] text-[11px] font-mono">{part.slice(1, -1)}</code>;
     return part;
   });
 }
@@ -41,11 +45,11 @@ function MarkdownBlock({ text }) {
   return (
     <div>
       {text.split("\n").map((line, i) => {
-        if (line.startsWith("### ")) return <h4 key={i} className="text-[#111827] font-semibold text-sm mt-3 mb-1.5 flex items-center gap-2"><div className="w-1 h-3 bg-[#7C3AED] rounded-full"/>{line.slice(4)}</h4>;
-        if (line.startsWith("## ")) return <h3 key={i} className="text-[#111827] font-bold text-base mt-4 mb-2 flex items-center gap-2"><div className="w-1.5 h-4 bg-[#7C3AED] rounded-full"/>{line.slice(3)}</h3>;
-        if (line.startsWith("- ") || line.startsWith("* ")) return <li key={i} className="text-[#6B7280] text-[13px] ml-4 list-disc marker:text-[#D1D5DB] pl-1 leading-relaxed">{renderInline(line.slice(2))}</li>;
-        if (line.trim() === "") return <div key={i} className="h-2" />;
-        return <p key={i} className="text-[#6B7280] text-[13px] leading-relaxed mb-2">{renderInline(line)}</p>;
+        if (line.startsWith("### ")) return <h4 key={i} className="text-[#111827] font-medium text-[13px] mt-4 mb-2 flex items-center gap-2 tracking-wide opacity-90"><div className="w-1 h-3 bg-[#111827] rounded-full opacity-30"/>{line.slice(4)}</h4>;
+        if (line.startsWith("## ")) return <h3 key={i} className="text-[#111827] font-medium text-sm mt-5 mb-3 flex items-center gap-2 tracking-wide"><div className="w-1.5 h-4 bg-[#111827] rounded-sm opacity-30"/>{line.slice(3)}</h3>;
+        if (line.startsWith("- ") || line.startsWith("* ")) return <li key={i} className="text-[#4B5563] text-[12px] ml-4 list-none pl-4 leading-relaxed relative mb-2 after:content-[''] after:absolute after:left-0 after:top-2.5 after:w-1.5 after:h-px after:bg-[#9CA3AF]">{renderInline(line.slice(2))}</li>;
+        if (line.trim() === "") return <div key={i} className="h-3" />;
+        return <p key={i} className="text-[#6B7280] text-[12px] leading-relaxed mb-3 font-normal">{renderInline(line)}</p>;
       })}
     </div>
   );
@@ -54,12 +58,14 @@ function MarkdownBlock({ text }) {
 function ChartTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white/95 backdrop-blur-xl border border-[#E5E7EB] rounded-lg p-2.5 shadow-lg shadow-black/5">
+    <div className="bg-white/95 backdrop-blur-xl border border-[#E5E7EB] rounded-xl p-3 shadow-lg flex flex-col gap-1.5 min-w-[120px]">
       {payload.map((e, i) => (
-        <div key={i} className="flex items-center gap-2.5 text-xs">
-          <span className="w-2 h-2 rounded-full" style={{ background: e.color || e.stroke }} />
-          <span className="text-[#9CA3AF] text-[10px] font-medium">{e.name}:</span>
-          <span className="text-[#111827] font-semibold">{typeof e.value === "number" ? `$${e.value < 0.01 ? e.value.toExponential(2) : e.value.toFixed(e.value < 1 ? 6 : 2)}` : e.value}</span>
+        <div key={i} className="flex items-center justify-between gap-4 text-[11px]">
+          <div className="flex items-center gap-2.5">
+             <span className="w-2 h-2 rounded-full shadow-sm" style={{ background: e.color || e.stroke }} />
+             <span className="text-[#6B7280] font-medium text-[10px] uppercase tracking-wider">{e.name}</span>
+          </div>
+          <span className="text-[#111827] font-mono font-medium">{typeof e.value === "number" ? `$${e.value < 0.01 ? e.value.toExponential(2) : e.value.toFixed(e.value < 1 ? 6 : 2)}` : e.value}</span>
         </div>
       ))}
     </div>
@@ -67,14 +73,14 @@ function ChartTooltip({ active, payload }) {
 }
 
 function ScoreBadge({ score }) {
-  const cfg = score >= 8 ? { c: "#16A34A", bg: "rgba(22,163,74,0.06)", bc: "rgba(22,163,74,0.2)" }
-    : score >= 6 ? { c: "#7C3AED", bg: "rgba(124,58,237,0.06)", bc: "rgba(124,58,237,0.2)" }
-    : { c: "#F97316", bg: "rgba(249,115,22,0.06)", bc: "rgba(249,115,22,0.2)" };
+  const cfg = score >= 8 ? { c: "#16A34A", bg: "bg-green-50/50", bc: "border-green-100" }
+    : score >= 6 ? { c: "#3B82F6", bg: "bg-blue-50/50", bc: "border-blue-100" }
+    : { c: "#F97316", bg: "bg-orange-50/50", bc: "border-orange-100" };
   return (
-    <div className="flex flex-col items-center justify-center w-12 h-12 rounded-xl border relative overflow-hidden group"
-      style={{ color: cfg.c, background: cfg.bg, borderColor: cfg.bc }}>
-      <span className="text-[10px] font-bold mb-0.5 opacity-60">SCORE</span>
-      <span className="text-sm font-bold leading-none">{score}</span>
+    <div className={`flex flex-col items-center justify-center w-[48px] h-[48px] rounded-xl border ${cfg.bc} ${cfg.bg} relative overflow-hidden shadow-sm`}
+      style={{ color: cfg.c }}>
+      <span className="text-[8px] font-medium mb-0.5 tracking-widest uppercase opacity-80">Score</span>
+      <span className="text-[16px] font-mono font-medium leading-none">{score}</span>
     </div>
   );
 }
@@ -98,11 +104,11 @@ export default function AnalyzerPage() {
       try {
         const boosts = await getTrendingTokens();
         const uniqueAddrs = [...new Set(boosts.slice(0, 8).map(b => b.tokenAddress))];
-        const results = await Promise.all(uniqueAddrs.slice(0, 5).map(a => searchTokens(a).catch(() => [])));
+        const results = await Promise.all(uniqueAddrs.slice(0, 4).map(a => searchTokens(a).catch(() => [])));
         const pairs = results.flatMap(r => r).filter(p => p && p.priceUsd);
         const seen = new Set();
         const unique = pairs.filter(p => { const k = p.baseToken?.address; if (seen.has(k)) return false; seen.add(k); return true; });
-        setSuggestions(unique.slice(0, 6).map(formatPairData).filter(Boolean));
+        setSuggestions(unique.slice(0, 4).map(formatPairData).filter(Boolean));
       } catch (err) { console.error("Suggestions failed:", err); }
       finally { setSuggestionsLoading(false); }
     }
@@ -114,7 +120,7 @@ export default function AnalyzerPage() {
   }, []);
 
   function saveRecentSearch(token) {
-    const updated = [{ name: token.name, symbol: token.symbol, address: token.address, chain: token.chain, imageUrl: token.imageUrl }, ...recentSearches.filter(r => r.address !== token.address)].slice(0, 5);
+    const updated = [{ name: token.name, symbol: token.symbol, address: token.address, chain: token.chain, imageUrl: token.imageUrl }, ...recentSearches.filter(r => r.address !== token.address)].slice(0, 4);
     setRecentSearches(updated);
     try { localStorage.setItem("inod_recent_searches", JSON.stringify(updated)); } catch {}
   }
@@ -128,7 +134,7 @@ export default function AnalyzerPage() {
     setReportUnlocked(false);
     try {
       const pairs = await searchTokens(query.trim());
-      const formatted = pairs.slice(0, 10).map(formatPairData).filter(Boolean);
+      const formatted = pairs.slice(0, 8).map(formatPairData).filter(Boolean);
       setSearchResults(formatted);
     } catch (err) { console.error("Search failed:", err); setSearchResults([]); }
     finally { setSearching(false); }
@@ -155,7 +161,7 @@ export default function AnalyzerPage() {
       const pairs = await searchTokens(addr);
       const formatted = pairs.slice(0, 1).map(formatPairData).filter(Boolean);
       if (formatted.length > 0) { selectToken(formatted[0]); }
-      else { setSearchResults(pairs.slice(0, 10).map(formatPairData).filter(Boolean)); }
+      else { setSearchResults(pairs.slice(0, 8).map(formatPairData).filter(Boolean)); }
     } catch (err) { console.error("Quick analyze failed:", err); }
     finally { setSearching(false); }
   }
@@ -198,147 +204,162 @@ export default function AnalyzerPage() {
     const insights = [];
     const buyRatio = t.buys24h + t.sells24h > 0 ? t.buys24h / (t.buys24h + t.sells24h) : 0.5;
     const volLiq = t.liquidity > 0 ? t.volume24h / t.liquidity : 0;
-    if (t.alphaScore >= 8) insights.push({ type: "positive", title: "Strong Multi-Factor Signal", text: `High Intel Score (${t.alphaScore}/10) indicating strong fundamentals and momentum.` });
-    else if (t.alphaScore <= 4) insights.push({ type: "negative", title: "Elevated Risk Factors", text: `Low Intel Score (${t.alphaScore}/10) suggests extreme risk.` });
-    if (buyRatio > 0.65) insights.push({ type: "positive", title: "Bullish Sentiment", text: `Strong buy pressure at ${(buyRatio * 100).toFixed(0)}%.` });
-    else if (buyRatio < 0.35) insights.push({ type: "negative", title: "Bearish Signal", text: `Heavy sell pressure at ${((1 - buyRatio) * 100).toFixed(0)}%.` });
-    if (volLiq > 3) insights.push({ type: "warning", title: "Extreme Activity", text: `Volume is ${volLiq.toFixed(1)}x liquidity — potential wash trading or massive hype.` });
-    else if (volLiq > 1) insights.push({ type: "positive", title: "Healthy Interest", text: `Good volume-to-liquidity ratio (${volLiq.toFixed(1)}x).` });
-    if (t.liquidity < 50000) insights.push({ type: "negative", title: "Critical Liquidity", text: `Very low liquidity pool (${formatCurrency(t.liquidity)}) — high slippage risk.` });
-    else if (t.liquidity > 1000000) insights.push({ type: "positive", title: "Deep Liquidity", text: `Massive pool (${formatCurrency(t.liquidity)}) — low slippage for whales.` });
-    if (t.priceChange24h > 100) insights.push({ type: "warning", title: "Massive Pump", text: `Up +${t.priceChange24h.toFixed(0)}% in 24h — high correction risk.` });
-    return insights.slice(0, 5);
+    if (t.alphaScore >= 8) insights.push({ type: "positive", title: "Strong Multi-Factor Signal", text: `High Intel Score (${t.alphaScore}/10) indicating sustained fundamentals and momentum logic.` });
+    else if (t.alphaScore <= 4) insights.push({ type: "negative", title: "Elevated Risk Factors", text: `Low Intel Score (${t.alphaScore}/10) implies extreme systematic risk.` });
+    if (buyRatio > 0.65) insights.push({ type: "positive", title: "Bullish Sentiment", text: `Accumulation wave detected at ${(buyRatio * 100).toFixed(0)}%.` });
+    else if (buyRatio < 0.35) insights.push({ type: "negative", title: "Bearish Signal", text: `Aggressive capitulation measured at ${((1 - buyRatio) * 100).toFixed(0)}%.` });
+    if (volLiq > 3) insights.push({ type: "warning", title: "Extreme Activity", text: `Volume sits at ${volLiq.toFixed(1)}x liquidity — potential manipulation or intense narrative hype.` });
+    else if (volLiq > 1) insights.push({ type: "positive", title: "Healthy Interest", text: `Optimal dynamic throughput (${volLiq.toFixed(1)}x ratio).` });
+    if (t.liquidity < 50000) insights.push({ type: "negative", title: "Critical Liquidity", text: `Shallow liquidity floor (${formatCurrency(t.liquidity)}) — maximum slippage danger.` });
+    return insights.slice(0, 4);
   }, [selectedToken]);
 
   return (
-    <div className="space-y-6 max-w-[1600px] mx-auto">
+    <div className="space-y-8 max-w-[1600px] mx-auto min-h-screen pb-12">
 
-      {/* ═══ HERO SEARCH HEADER ═══ */}
-      <div className={`p-6 md:p-8 ${CARD} text-center overflow-visible z-20`}>
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:6px_6px]" style={{ '--pattern-fg': 'rgba(124,58,237,0.1)' }} />
-        <h1 className="text-2xl md:text-3xl font-bold text-[#111827] mb-2 tracking-tight">AI Research Engine</h1>
-        <p className="text-[#6B7280] text-sm max-w-lg mx-auto mb-8 leading-relaxed">Cross-reference real-time on-chain data with institutional-grade AI analysis to generate comprehensive research reports.</p>
+      {/* ═══ PREMIUM DARK HERO ═══ */}
+      <div className="relative rounded-2xl bg-[#111827] p-8 md:p-12  shadow-xl border border-gray-800 text-center z-20">
+        <CrosshatchStrip className="absolute inset-0 opacity-[0.06] pointer-events-none" color="rgba(255,255,255,0.8)" size="8px" />
+        <div className="absolute top-0 right-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-[100px] pointer-events-none -translate-y-1/2 translate-x-1/2" />
 
-        <form onSubmit={handleSearch} className="max-w-2xl mx-auto flex flex-col sm:flex-row gap-3 relative z-30">
-          <div className="relative flex-1">
-            <RiSearchLine className="absolute left-5 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-lg" />
-            <input type="text" value={query} onChange={e => setQuery(e.target.value)} placeholder="Enter contract address or token symbol..." className="w-full pl-12 pr-6 py-4 rounded-xl bg-[#F8F9FB] border border-[#E5E7EB] text-[#111827] text-base placeholder:text-[#9CA3AF] focus:border-[#7C3AED]/50 focus:outline-none transition-all" />
-          </div>
-          <button type="submit" disabled={searching} className="btn-intel px-8 py-4 flex items-center justify-center gap-2 shrink-0 disabled:opacity-50 text-sm font-bold">
-            {searching ? <RiLoader4Line className="animate-spin text-lg" /> : <RiSearchLine className="text-lg" />}
-            Analyze
-          </button>
-        </form>
+        <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto">
+           <h1 className="text-3xl md:text-5xl font-medium text-white mb-4 tracking-tight leading-tight">AI Research Engine</h1>
+           <p className="text-white/60 text-[13px] md:text-sm leading-relaxed font-normal mb-10 max-w-xl">Deep-scan real-time liquidity protocols and cross-reference token topography with our institutional-grade semantic network to generate actionable intel.</p>
 
-        <AnimatePresence>
-          {searchResults.length > 0 && (
-            <motion.div initial={{ opacity: 0, y: 10, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="absolute z-50 left-1/2 -translate-x-1/2 mt-4 bg-white/95 backdrop-blur-xl border border-[#E5E7EB] rounded-xl shadow-xl shadow-black/5 w-[calc(100%-48px)] max-w-2xl max-h-[400px] overflow-y-auto">
-              <div className="sticky top-0 px-5 py-3 border-b border-[#E5E7EB] bg-white/95 backdrop-blur-md flex justify-between items-center z-10">
-                 <p className="text-[#9CA3AF] text-[10px] uppercase tracking-widest font-bold">Select Token ({searchResults.length} results)</p>
-                 <button onClick={() => setSearchResults([])} className="text-[#9CA3AF] hover:text-[#111827]"><RiCloseLine/></button>
+           <form onSubmit={handleSearch} className="w-full relative max-w-2xl mx-auto">
+              <div className="relative">
+                 <RiSearchLine className="absolute left-5 top-1/2 -translate-y-1/2 text-white/40 text-lg" />
+                 <input type="text" value={query} onChange={e => setQuery(e.target.value)} placeholder="Deposit contract address or ticker designation..." className="w-full pl-14 pr-32 py-4 rounded-xl bg-white/5 border border-white/10 text-white text-[14px] placeholder:text-white/40 focus:border-white/30 focus:bg-white/10 focus:outline-none transition-all shadow-inner backdrop-blur-md font-medium" />
+                 
+                 <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                   <button type="submit" disabled={searching} className="px-5 py-2.5 rounded-lg bg-white text-[#111827] text-[13px] font-medium hover:bg-gray-100 transition-colors flex items-center justify-center min-w-[100px] shadow-sm">
+                     {searching ? <RiLoader4Line className="animate-spin text-lg" /> : "Analyze"}
+                   </button>
+                 </div>
               </div>
-              <div className="p-2 space-y-1">
-                {searchResults.map((token, i) => (
-                  <button key={i} onClick={() => selectToken(token)} className="w-full flex items-center justify-between p-3 hover:bg-[#F8F9FB] transition-colors text-left rounded-lg group">
-                    <div className="flex items-center gap-4 min-w-0">
-                      {token.imageUrl ? <img src={token.imageUrl} alt="" className="w-10 h-10 rounded-full ring-1 ring-[#E5E7EB]" /> : <div className="w-10 h-10 rounded-full bg-[rgba(124,58,237,0.06)] ring-1 ring-[#E5E7EB] flex items-center justify-center text-sm font-bold text-[#7C3AED]">{token.symbol?.slice(0, 2)}</div>}
-                      <div className="min-w-0">
-                        <span className="text-[#111827] font-bold text-sm block truncate group-hover:text-[#7C3AED] transition-colors">{token.name}</span>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[#6B7280] text-[11px] font-mono">{token.symbol}</span>
-                          <span className="px-1.5 py-0.5 border border-[#E5E7EB] rounded bg-[#F8F9FB] text-[#9CA3AF] text-[9px] uppercase font-bold">{getChainLabel(token.chain)}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <span className="text-[#111827] text-sm font-bold block">{token.price}</span>
-                      <span className={`flex items-center justify-end gap-0.5 text-[11px] font-bold ${token.positive ? "text-[#16A34A]" : "text-[#DC2626]"}`}>
-                        {token.positive ? <RiArrowUpSLine /> : <RiArrowDownSLine />}{Math.abs(token.priceChange24h || 0).toFixed(2)}%
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+           </form>
 
-      {/* ═══ STATE 1: NO TOKEN SELECTED ═══ */}
-      {!selectedToken && !searching && searchResults.length === 0 && (
-        <div className="grid lg:grid-cols-3 gap-6">
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className={`lg:col-span-2 p-6 ${CARD}`}>
-             <div className="flex items-center gap-2.5 mb-6">
-              <RiPulseLine className="text-[#F97316] text-lg" />
-              <h3 className="text-[#111827] font-bold text-lg">Trending Projects</h3>
-            </div>
-            {suggestionsLoading ? (
-              <div className="flex items-center justify-center py-12"><RiLoader4Line className="text-[#7C3AED] animate-spin text-3xl opacity-50" /></div>
-            ) : suggestions.length === 0 ? (
-              <p className="text-[#9CA3AF] text-sm text-center py-6">No trending data available</p>
-            ) : (
-              <div className="grid sm:grid-cols-2 gap-4">
-                {suggestions.map(s => (
-                  <button key={s.address} onClick={() => quickAnalyze(s.address)} className={`flex items-center justify-between p-4 ${CARD_INNER} hover:border-[#7C3AED]/20 transition-all text-left group`}>
-                    <div className="flex items-center gap-4 min-w-0 relative z-10">
-                      {s.imageUrl ? <img src={s.imageUrl} alt="" className="w-10 h-10 rounded-full shrink-0" /> : <div className="w-10 h-10 rounded-full bg-[rgba(124,58,237,0.06)] flex items-center justify-center text-[13px] font-bold text-[#7C3AED] shrink-0 border border-[#E5E7EB]">{s.symbol?.slice(0, 2)}</div>}
-                      <div className="min-w-0">
-                        <span className="text-[#111827] text-sm font-bold block truncate">{s.name}</span>
-                        <div className="flex items-center gap-1.5 mt-0.5">
-                          <span className="text-[#6B7280] text-[11px] font-mono">{s.symbol}</span>
-                          <span className="w-1 h-1 rounded-full bg-[#D1D5DB]" />
-                          <span className="text-[#9CA3AF] text-[10px] uppercase font-bold tracking-wider">{getChainLabel(s.chain)}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right shrink-0 relative z-10">
-                       <span className="text-[#111827] text-xs font-bold block font-mono">{s.price}</span>
-                       <span className={`text-[11px] font-bold flex items-center justify-end gap-0.5 ${s.positive ? "text-[#16A34A]" : "text-[#DC2626]"}`}>
-                        {s.positive ? <RiArrowUpSLine /> : <RiArrowDownSLine />}{Math.abs(s.priceChange24h || 0).toFixed(1)}%
-                       </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </motion.div>
-
-          <div className="space-y-6">
-            {recentSearches.length > 0 && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`p-6 ${CARD}`}>
-                <div className="flex items-center gap-2 mb-4">
-                  <RiHistoryLine className="text-[#9CA3AF]" />
-                  <h3 className="text-[#111827] font-bold text-sm">Recent Research</h3>
+           <AnimatePresence>
+            {searchResults.length > 0 && (
+              <motion.div initial={{ opacity: 0, y: 10, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.98, opacity: 0 }} className="absolute z-50 left-1/2 -translate-x-1/2 top-[calc(100%+8px)] bg-white border border-[#E5E7EB] rounded-2xl shadow-2xl shadow-black/10 origin-top overflow-hidden w-[95%] max-w-2xl max-h-[350px] overflow-y-auto text-left">
+                <div className="sticky top-0 bg-white/95 backdrop-blur-md px-5 py-3 border-b border-[#E5E7EB] flex items-center justify-between z-10">
+                   <span className="text-[#9CA3AF] text-[9px] uppercase tracking-widest font-medium">Results Rendered ({searchResults.length})</span>
+                   <button onClick={() => setSearchResults([])} className="text-[#9CA3AF] hover:text-[#111827] transition-colors"><RiCloseLine/></button>
                 </div>
-                <div className="flex flex-wrap gap-2.5">
-                  {recentSearches.map(r => (
-                    <button key={r.address} onClick={() => quickAnalyze(r.address)} className={`flex items-center gap-2 px-3 py-2 ${CARD_INNER} hover:border-[#7C3AED]/20 transition-colors group`}>
-                      {r.imageUrl ? <img src={r.imageUrl} alt="" className="w-5 h-5 rounded-full" /> : <div className="w-5 h-5 rounded-full bg-[rgba(124,58,237,0.06)] flex items-center justify-center text-[9px] font-bold text-[#7C3AED]">{r.symbol?.slice(0, 2)}</div>}
-                      <span className="text-[#6B7280] text-[11px] font-bold group-hover:text-[#111827] transition-colors">{r.symbol}</span>
+                <div className="p-2 space-y-1">
+                  {searchResults.map((token, i) => (
+                    <button key={i} onClick={() => selectToken(token)} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors group">
+                       <div className="flex items-center gap-4">
+                          {token.imageUrl ? 
+                             <img src={token.imageUrl} alt="" className="w-9 h-9 rounded-full border border-gray-100 shadow-sm shrink-0" /> : 
+                             <div className="w-9 h-9 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-[10px] text-gray-800 font-medium shrink-0">{token.symbol?.slice(0, 2)}</div>
+                          }
+                          <div className="text-left">
+                             <span className="text-[#111827] text-[13px] font-medium leading-tight group-hover:text-[#3B82F6] transition-colors line-clamp-1">{token.name}</span>
+                             <div className="flex items-center gap-2 mt-0.5">
+                               <span className="text-[#6B7280] text-[11px] font-mono">{token.symbol}</span>
+                               <span className="text-[9px] px-1.5 py-0.5 rounded border border-[#E5E7EB] bg-[#FAFBFC] text-[#9CA3AF] tracking-wide uppercase font-medium">{getChainLabel(token.chain)}</span>
+                             </div>
+                          </div>
+                       </div>
+                       <div className="text-right">
+                          <span className="text-[#111827] text-[13px] font-mono font-medium block">{token.price}</span>
+                          <span className={`flex items-center justify-end gap-0.5 text-[10px] font-medium mt-0.5 ${token.positive ? "text-[#16A34A]" : "text-[#DC2626]"}`}>
+                            {token.positive ? <RiArrowUpSLine className="text-[12px]" /> : <RiArrowDownSLine className="text-[12px]" />}{Math.abs(token.priceChange24h || 0).toFixed(1)}%
+                          </span>
+                       </div>
                     </button>
                   ))}
                 </div>
               </motion.div>
             )}
+           </AnimatePresence>
+        </div>
+      </div>
+
+      {/* ═══ STATE 1: IDLE / DASHBOARD ═══ */}
+      {!selectedToken && !searching && searchResults.length === 0 && (
+        <div className="grid lg:grid-cols-3 gap-8 pb-12">
+          
+          {/* Trending Scans */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 space-y-4">
+             <div className="flex items-center gap-2 mb-2 px-1">
+               <RiPulseLine className="text-[#111827] opacity-60" />
+               <h3 className="text-[#111827] text-[13px] font-medium tracking-wide uppercase">Trending Scans</h3>
+             </div>
+             
+             {suggestionsLoading ? (
+               <div className={`flex flex-col items-center justify-center p-20 ${CARD} border-dashed`}>
+                  <RiLoader4Line className="text-2xl animate-spin text-[#111827] mb-3" />
+                  <p className="text-[#6B7280] text-[12px] font-medium">Calibrating volume grids...</p>
+               </div>
+             ) : suggestions.length === 0 ? (
+               <div className={`p-10 text-center ${CARD} border-dashed`}><p className="text-[#6B7280] text-[12px] font-medium">Awaiting indexation vectors.</p></div>
+             ) : (
+               <div className="grid sm:grid-cols-2 gap-4">
+                 {suggestions.map((s, i) => (
+                   <button key={s.address} onClick={() => quickAnalyze(s.address)} className={`flex items-center justify-between p-4 rounded-xl border border-[#E5E7EB] bg-white hover:border-[#D1D5DB] transition-all hover:-translate-y-0.5 hover:shadow-sm text-left group`}>
+                      <div className="flex items-center gap-3.5 min-w-0 pr-2">
+                         {s.imageUrl ? 
+                            <img src={s.imageUrl} alt="" className="w-10 h-10 rounded-full border border-gray-100 shadow-sm shrink-0" /> : 
+                            <div className="w-10 h-10 rounded-full bg-[#FAFBFC] border border-[#E5E7EB] flex items-center justify-center text-[11px] text-[#111827] font-medium shrink-0 shadow-sm">{s.symbol?.slice(0, 2)}</div>
+                         }
+                         <div className="min-w-0">
+                           <span className="text-[#111827] text-[13px] font-medium block truncate max-w-[120px]">{s.name}</span>
+                           <div className="flex items-center gap-2 mt-1">
+                             <span className="text-[#6B7280] text-[11px] font-mono tracking-wide leading-none">{s.symbol}</span>
+                             <span className="text-[9px] text-[#9CA3AF] uppercase font-medium tracking-wide leading-none border border-gray-100 px-1 rounded bg-gray-50">{getChainLabel(s.chain)}</span>
+                           </div>
+                         </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                         <span className="text-[#111827] text-[12px] font-medium block font-mono bg-gray-50 rounded pl-1 leading-normal mb-0.5">{s.price}</span>
+                         <span className={`text-[10px] font-medium flex items-center justify-end gap-0.5 ${s.positive ? "text-[#16A34A]" : "text-[#DC2626]"}`}>
+                          {s.positive ? <RiArrowUpSLine className="text-[12px]" /> : <RiArrowDownSLine className="text-[12px]" />}{Math.abs(s.priceChange24h || 0).toFixed(1)}%
+                         </span>
+                      </div>
+                   </button>
+                 ))}
+               </div>
+             )}
+          </motion.div>
+
+          <div className="space-y-6">
+            {recentSearches.length > 0 && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`p-6 ${CARD}`}>
+                 <div className="flex items-center gap-2 mb-5">
+                   <RiHistoryLine className="text-[#9CA3AF]" />
+                   <h3 className="text-[#111827] font-medium text-[13px] uppercase tracking-wide">Query History</h3>
+                 </div>
+                 <div className="flex flex-wrap gap-2.5">
+                   {recentSearches.map(r => (
+                     <button key={r.address} onClick={() => quickAnalyze(r.address)} className="flex items-center gap-2 pr-3 pl-1.5 py-1.5 rounded-full border border-[#E5E7EB] bg-[#FAFBFC] hover:border-[#D1D5DB] hover:bg-white hover:shadow-sm transition-all group">
+                       {r.imageUrl ? <img src={r.imageUrl} alt="" className="w-5 h-5 rounded-full shadow-sm" /> : <div className="w-5 h-5 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center text-[9px] font-medium text-gray-600">{r.symbol?.slice(0, 2)}</div>}
+                       <span className="text-[#4B5563] text-[11px] font-medium font-mono tracking-wide group-hover:text-[#111827] transition-colors">{r.symbol}</span>
+                     </button>
+                   ))}
+                 </div>
+              </motion.div>
+            )}
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className={`p-6 ${CARD}`}>
-              <div className="flex items-center gap-2 mb-4">
-                <RiLightbulbLine className="text-[#3B82F6]" />
-                <h3 className="text-[#111827] font-bold text-sm">Research Tips</h3>
-              </div>
-              <ul className="space-y-3">
-                {[
-                  "Paste direct contract addresses for the most accurate results.",
-                  "Tokens with Intel Score 8+ represent premium opportunities.",
-                  "Healthy Vol/Liq ratios typically sit between 0.5x and 2.5x.",
-                  "Heavy accumulation is signaled by >60% buy pressure over 24h.",
-                ].map((tip, i) => (
-                  <li key={i} className="flex items-start gap-2.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] mt-1.5 shrink-0 opacity-80" />
-                    <span className="text-[#6B7280] text-[11px] leading-relaxed font-medium">{tip}</span>
-                  </li>
-                ))}
-              </ul>
+               <div className="flex items-center gap-2 mb-5">
+                 <RiLightbulbLine className="text-[#111827] opacity-60" />
+                 <h3 className="text-[#111827] font-medium text-[13px] uppercase tracking-wide">Engine Directives</h3>
+               </div>
+               <div className="space-y-4">
+                 {[
+                   "Deposit direct contract addresses to circumvent synthetic spoofing vectors.",
+                   "Matrix tokens holding an Intel Score >8 output substantial structural dominance.",
+                   "Optimal Volume/Liquidity metrics compute between 0.5x and 2.5x tolerances.",
+                   "Capital formation events correlate to >60% buy friction spanning 24h intervals.",
+                 ].map((tip, i) => (
+                   <div key={i} className="flex items-start gap-3">
+                     <RiSparklingLine className="text-[#3B82F6] text-sm shrink-0 mt-0.5 opacity-80" />
+                     <p className="text-[#6B7280] text-[11px] leading-relaxed font-normal">{tip}</p>
+                   </div>
+                 ))}
+               </div>
             </motion.div>
           </div>
         </div>
@@ -346,256 +367,267 @@ export default function AnalyzerPage() {
 
       {/* ═══ STATE 2: TOKEN SELECTED ═══ */}
       {selectedToken && (
-        <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
+        <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-8">
 
-          {/* Main Token Card */}
+          {/* Active Token Module */}
           <div className={`p-6 md:p-8 ${CARD}`}>
+             <CrosshatchStrip className="absolute inset-0 opacity-[0.015] pointer-events-none" size="8px" />
              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
                <div className="flex items-center gap-5">
-                 {selectedToken.imageUrl ? <img src={selectedToken.imageUrl} alt="" className="w-20 h-20 rounded-2xl ring-2 ring-[#E5E7EB]" /> : <div className="w-20 h-20 rounded-2xl bg-[rgba(124,58,237,0.06)] ring-2 ring-[#E5E7EB] flex items-center justify-center font-bold text-[#7C3AED] text-3xl">{selectedToken.symbol?.slice(0, 2)}</div>}
-                 <div>
-                   <div className="flex items-center gap-3 mb-1">
-                     <h2 className="text-[#111827] font-black text-2xl tracking-tight">{selectedToken.name}</h2>
-                     <ScoreBadge score={selectedToken.alphaScore} />
-                   </div>
-                   <div className="flex items-center gap-2 mb-2 flex-wrap">
-                     <span className="text-[#6B7280] font-mono text-sm">{selectedToken.symbol}</span>
-                     <span className="w-1 h-1 rounded-full bg-[#D1D5DB]" />
-                     <span className="px-2 py-0.5 rounded border border-[#E5E7EB] bg-[#F8F9FB] text-[#6B7280] text-[10px] font-bold uppercase tracking-wider">{getChainLabel(selectedToken.chain)}</span>
-                     <span className="px-2 py-0.5 rounded border border-[#E5E7EB] bg-[#F8F9FB] text-[#6B7280] text-[10px] font-bold uppercase tracking-wider">{selectedToken.dex}</span>
-                   </div>
-                   <div className="flex items-baseline gap-3">
-                     <span className="text-[#111827] text-3xl font-black font-mono">{selectedToken.price}</span>
-                     <span className={`flex items-center px-1.5 py-0.5 rounded text-xs font-bold ${selectedToken.positive ? "bg-[#16A34A]/8 text-[#16A34A]" : "bg-[#DC2626]/8 text-[#DC2626]"}`}>
-                        {selectedToken.positive ? "+" : ""}{selectedToken.priceChange24h?.toFixed(2)}%
-                     </span>
-                   </div>
-                 </div>
+                  {selectedToken.imageUrl ? 
+                     <img src={selectedToken.imageUrl} alt="" className="w-16 h-16 rounded-2xl border border-gray-100 shadow-sm" /> : 
+                     <div className="w-16 h-16 rounded-2xl bg-[#FAFBFC] border border-[#E5E7EB] flex items-center justify-center font-medium text-[#111827] text-xl shadow-sm">{selectedToken.symbol?.slice(0, 2)}</div>
+                  }
+                  <div>
+                     <div className="flex items-center gap-3 mb-1">
+                       <h2 className="text-[#111827] font-medium text-[22px] tracking-tight truncate max-w-[200px] sm:max-w-xs">{selectedToken.name}</h2>
+                       <ScoreBadge score={selectedToken.alphaScore} />
+                     </div>
+                     <div className="flex items-center gap-2 mb-2 flex-wrap">
+                       <span className="text-[#6B7280] font-mono text-[11px] tracking-wide bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">{selectedToken.symbol}</span>
+                       <span className="w-1 h-1 rounded-full bg-[#D1D5DB]" />
+                       <span className="text-[#9CA3AF] text-[9px] font-medium uppercase tracking-widest">{getChainLabel(selectedToken.chain)} / {selectedToken.dex}</span>
+                     </div>
+                     <div className="flex items-baseline gap-3">
+                       <span className="text-[#111827] text-2xl font-light font-mono tracking-tight">{selectedToken.price}</span>
+                       <span className={`flex items-center gap-0.5 text-[11px] font-medium ${selectedToken.positive ? "text-[#16A34A]" : "text-[#DC2626]"}`}>
+                          {selectedToken.positive ? <RiArrowUpSLine className="text-[14px]" /> : <RiArrowDownSLine className="text-[14px]" />}{Math.abs(selectedToken.priceChange24h || 0).toFixed(2)}%
+                       </span>
+                     </div>
+                  </div>
                </div>
+               
                <div className="flex flex-col items-end gap-3 min-w-[200px]">
                   <div className="flex gap-2">
                     {selectedToken.url && (
-                      <a href={selectedToken.url} target="_blank" rel="noopener noreferrer" className="p-3 rounded-xl border border-[#E5E7EB] bg-[#F8F9FB] text-[#6B7280] hover:text-[#111827] hover:border-[#7C3AED]/30 transition-colors">
-                        <RiExternalLinkLine className="text-lg" />
+                      <a href={selectedToken.url} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl border border-[#E5E7EB] bg-[#FAFBFC] text-[#9CA3AF] hover:text-[#111827] hover:border-[#111827]/20 hover:shadow-sm transition-all group">
+                        <RiExternalLinkLine className="text-[17px] group-hover:scale-110 transition-transform" />
                       </a>
                     )}
-                    <button onClick={() => { setSelectedToken(null); setAiReport(null); setReportUnlocked(false); }} className="p-3 rounded-xl border border-[#E5E7EB] bg-[#F8F9FB] text-[#6B7280] hover:text-[#DC2626] hover:border-[#DC2626]/30 transition-colors">
-                      <RiCloseLine className="text-lg" />
+                    <button onClick={() => { setSelectedToken(null); setAiReport(null); setReportUnlocked(false); }} className="p-2.5 rounded-xl border border-[#E5E7EB] bg-[#FAFBFC] text-[#9CA3AF] hover:text-[#DC2626] hover:border-[#DC2626]/20 hover:bg-red-50 transition-all group">
+                       <RiCloseLine className="text-[17px] group-hover:rotate-90 transition-transform" />
                     </button>
                   </div>
                   {!reportUnlocked && (
-                    <button onClick={unlockReport} className="w-full btn-intel px-5 py-3 flex items-center justify-center gap-2 text-sm font-bold">
-                      <RiSparklingLine className="text-lg" /> Unlock AI Report ({AI_REPORT_COST} INOD)
+                    <button onClick={unlockReport} className="w-full px-5 py-3 rounded-xl bg-[#111827] text-white flex items-center justify-center gap-2 text-[12px] font-medium shadow-md hover:bg-[#374151] transition-all group">
+                       <RiSparklingLine className="text-lg opacity-80 group-hover:rotate-12 transition-transform" /> Generate Audit ({AI_REPORT_COST} INOD)
                     </button>
                   )}
                </div>
              </div>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-6">
+          <div className="grid lg:grid-cols-12 gap-8">
 
             {/* ═══ LEFT: METRICS ═══ */}
             <div className="lg:col-span-4 space-y-6">
-              <div className={`p-1.5 ${CARD}`}>
-                 <div className="grid grid-cols-2 gap-1.5">
-                   {[
-                    { label: "Volume 24h", value: formatCurrency(selectedToken.volume24h), icon: RiBarChartBoxLine, color: "#3B82F6" },
-                    { label: "Liquidity", value: formatCurrency(selectedToken.liquidity), icon: RiWaterFlashLine, color: "#06B6D4" },
-                    { label: "Market Cap", value: formatCurrency(selectedToken.marketCap), icon: RiCoinLine, color: "#8B5CF6" },
-                    { label: "Pair Age", value: timeAgo(selectedToken.pairCreatedAt), icon: RiTimeLine, color: "#F59E0B" },
-                   ].map(m => (
-                     <div key={m.label} className={`p-4 ${CARD_INNER} flex flex-col gap-2`}>
-                        <div className="flex items-center gap-1.5">
-                          <m.icon className="text-[13px]" style={{ color: m.color }}/>
-                          <span className="text-[#9CA3AF] text-[10px] uppercase font-bold tracking-widest">{m.label}</span>
-                        </div>
-                        <span className="text-[#111827] font-black text-sm">{m.value}</span>
-                     </div>
-                   ))}
-                   <div className={`p-4 ${CARD_INNER} flex flex-col gap-2`}>
-                      <span className="text-[#9CA3AF] text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-[#16A34A]"/> 24h Buys</span>
-                      <span className="text-[#16A34A] font-black text-sm">{formatNumber(selectedToken.buys24h)}</span>
-                   </div>
-                   <div className={`p-4 ${CARD_INNER} flex flex-col gap-2`}>
-                      <span className="text-[#9CA3AF] text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-[#DC2626]"/> 24h Sells</span>
-                      <span className="text-[#DC2626] font-black text-sm">{formatNumber(selectedToken.sells24h)}</span>
-                   </div>
-                 </div>
-              </div>
-
-               {smartInsights.length > 0 && (
-                <div className={`p-5 ${CARD}`}>
-                  <div className="flex items-center justify-between mb-5 border-b border-[#E5E7EB] pb-3">
-                    <div className="flex items-center gap-2">
-                      <RiPulseLine className="text-[#7C3AED]" />
-                      <h3 className="text-[#111827] font-bold text-sm">Live Insights</h3>
-                    </div>
-                    <span className="flex h-2 w-2 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#7C3AED] opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#7C3AED]"></span>
-                    </span>
-                  </div>
-                  <div className="space-y-4">
-                    {smartInsights.map((insight, i) => (
-                      <div key={i} className="flex gap-3 items-start">
-                        <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
-                          insight.type === "positive" ? "bg-[#16A34A]" : insight.type === "negative" ? "bg-[#DC2626]" : "bg-[#F97316]"
-                        }`} />
-                        <div>
-                          <h4 className={`text-xs font-bold mb-0.5 ${
-                            insight.type === "positive" ? "text-[#16A34A]" : insight.type === "negative" ? "text-[#DC2626]" : "text-[#F97316]"
-                          }`}>{insight.title}</h4>
-                          <p className="text-[#6B7280] text-[11px] leading-relaxed font-medium">{insight.text}</p>
-                        </div>
+               <div className="flex items-center gap-2 mb-2 px-1">
+                 <RiPulseLine className="text-[#111827] opacity-60" />
+                 <h3 className="text-[#111827] text-[13px] font-medium tracking-wide uppercase">Core Diagnostics</h3>
+               </div>
+               
+               <div className={`p-1.5 ${CARD}`}>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {[
+                     { label: "Volume 24h", value: formatCurrency(selectedToken.volume24h), icon: RiBarChartBoxLine, color: "#3B82F6" },
+                     { label: "Liquidity", value: formatCurrency(selectedToken.liquidity), icon: RiWaterFlashLine, color: "#06B6D4" },
+                     { label: "Market Cap", value: formatCurrency(selectedToken.marketCap), icon: RiCoinLine, color: "#8B5CF6" },
+                     { label: "Pair Age", value: timeAgo(selectedToken.pairCreatedAt), icon: RiTimeLine, color: "#F59E0B" },
+                    ].map(m => (
+                      <div key={m.label} className={`p-4 ${CARD_INNER} flex flex-col justify-between min-h-[95px]`}>
+                         <div className="flex items-center gap-1.5 mb-2">
+                           <m.icon className="text-[14px]" style={{ color: m.color }}/>
+                           <span className="text-[#9CA3AF] text-[9px] uppercase font-medium tracking-widest leading-none">{m.label}</span>
+                         </div>
+                         <span className="text-[#111827] font-mono font-medium text-[15px] leading-tight mt-auto">{m.value}</span>
                       </div>
                     ))}
+                    <div className={`p-4 ${CARD_INNER} flex flex-col justify-between min-h-[95px]`}>
+                       <span className="text-[#9CA3AF] text-[9px] uppercase font-medium tracking-widest flex items-center gap-1.5 leading-none mb-2"><div className="w-1.5 h-1.5 rounded-full bg-[#16A34A]"/> 24h Inflow</span>
+                       <span className="text-[#16A34A] font-mono font-medium text-[15px] leading-tight mt-auto">{formatNumber(selectedToken.buys24h)}</span>
+                    </div>
+                    <div className={`p-4 ${CARD_INNER} flex flex-col justify-between min-h-[95px]`}>
+                       <span className="text-[#9CA3AF] text-[9px] uppercase font-medium tracking-widest flex items-center gap-1.5 leading-none mb-2"><div className="w-1.5 h-1.5 rounded-full bg-[#DC2626]"/> 24h Outflow</span>
+                       <span className="text-[#DC2626] font-mono font-medium text-[15px] leading-tight mt-auto">{formatNumber(selectedToken.sells24h)}</span>
+                    </div>
                   </div>
-                </div>
-              )}
+               </div>
 
-              <div className={`p-5 ${CARD} aspect-square flex flex-col`}>
-                <div className="flex items-center gap-2 mb-2">
-                  <RiRadarLine className="text-[#7C3AED]" />
-                  <h3 className="text-[#111827] font-bold text-sm">Token Profile</h3>
-                </div>
-                <div className="flex-1 relative -mx-4 -mb-4">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={radarData} outerRadius="65%">
-                      <PolarGrid stroke="#E5E7EB" strokeDasharray="3 3" />
-                      <PolarAngleAxis dataKey="metric" tick={{ fill: "#6B7280", fontSize: 9, fontWeight: "bold" }} />
-                      <PolarRadiusAxis domain={[0, 10]} tick={false} axisLine={false} />
-                      <Radar name="Analysis" dataKey="value" stroke="#7C3AED" fill="#7C3AED" fillOpacity={0.1} strokeWidth={2} />
-                      <Tooltip content={<ChartTooltip />} />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
+               {smartInsights.length > 0 && (
+                 <div className={`p-6 ${CARD}`}>
+                   <div className="flex items-center justify-between mb-5 border-b border-[#E5E7EB] pb-4">
+                     <div className="flex items-center gap-2">
+                       <RiBrainLine className="text-[#3B82F6]" />
+                       <h3 className="text-[#111827] font-medium text-[13px] uppercase tracking-wide">Live Feed Insights</h3>
+                     </div>
+                     <span className="flex h-2 w-2 relative">
+                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3B82F6] opacity-75"></span>
+                       <span className="relative inline-flex rounded-full h-2 w-2 bg-[#3B82F6]"></span>
+                     </span>
+                   </div>
+                   <div className="space-y-4">
+                     {smartInsights.map((insight, i) => (
+                       <div key={i} className="flex gap-3 items-start border-l-2 pl-3 py-1" style={{ borderColor: insight.type === "positive" ? "#16A34A" : insight.type === "negative" ? "#DC2626" : "#F97316" }}>
+                         <div>
+                           <h4 className={`text-[11px] uppercase tracking-wider font-medium mb-1.5 leading-none ${
+                             insight.type === "positive" ? "text-green-600/[0.8]" : insight.type === "negative" ? "text-red-600/[0.8]" : "text-orange-500/[0.8]"
+                           }`}>{insight.title}</h4>
+                           <p className="text-[#4B5563] text-[11px] leading-relaxed font-normal">{insight.text}</p>
+                         </div>
+                       </div>
+                     ))}
+                   </div>
+                 </div>
+               )}
+
+               <div className={`p-6 ${CARD} aspect-square flex flex-col`}>
+                 <div className="flex items-center gap-2 mb-2">
+                   <RiRadarLine className="text-[#111827] opacity-60" />
+                   <h3 className="text-[#111827] font-medium text-[13px] uppercase tracking-wide">Topographical Plot</h3>
+                 </div>
+                 <div className="flex-1 relative -mx-4 -mb-4">
+                   <ResponsiveContainer width="100%" height="100%">
+                     <RadarChart data={radarData} outerRadius="70%">
+                       <PolarGrid stroke="#E5E7EB" strokeDasharray="3 3" />
+                       <PolarAngleAxis dataKey="metric" tick={{ fill: "#6B7280", fontSize: 9, fontWeight: 500 }} />
+                       <PolarRadiusAxis domain={[0, 10]} tick={false} axisLine={false} />
+                       <Radar name="Intel Rating" dataKey="value" stroke="#111827" fill="#111827" fillOpacity={0.06} strokeWidth={1.5} />
+                       <Tooltip content={<ChartTooltip />} />
+                     </RadarChart>
+                   </ResponsiveContainer>
+                 </div>
+               </div>
             </div>
 
             {/* ═══ RIGHT: CHARTS & DOSSIER ═══ */}
             <div className="lg:col-span-8 space-y-6">
 
               {/* Price Chart */}
+              <div className="flex items-center justify-between mb-2 mt-1 px-1">
+                 <div className="flex items-center gap-2">
+                   <RiBarChartBoxLine className="text-[#111827] opacity-60" />
+                   <h3 className="text-[#111827] text-[13px] font-medium tracking-wide uppercase">Velocity Render</h3>
+                 </div>
+                 <span className="text-[#9CA3AF] text-[9px] font-medium uppercase tracking-widest border border-dashed border-[#E5E7EB] px-2 py-1 rounded-md bg-white">24H Window</span>
+              </div>
               <div className={`p-6 ${CARD} h-[320px] flex flex-col`}>
-                <div className="flex items-center justify-between mb-4">
-                   <div className="flex items-center gap-2">
-                    <RiBarChartBoxLine className="text-[#3B82F6] text-lg" />
-                    <h3 className="text-[#111827] font-bold text-sm">Price Trajectory</h3>
-                  </div>
-                  <span className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-widest border border-[#E5E7EB] px-2 py-1 rounded bg-[#F8F9FB]">24H View</span>
-                </div>
-                <div className="flex-1 -ml-4 -mr-2">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={priceHistory}>
-                      <defs>
-                        <linearGradient id="gPrice" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor={selectedToken.positive ? "#16A34A" : "#DC2626"} stopOpacity={0.15} />
-                          <stop offset="100%" stopColor={selectedToken.positive ? "#16A34A" : "#DC2626"} stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="4 4" stroke="#E5E7EB" vertical={false} />
-                      <XAxis dataKey="t" tick={{ fill: "#9CA3AF", fontSize: 10 }} axisLine={false} tickLine={false} tickMargin={10} />
-                      <YAxis tick={{ fill: "#6B7280", fontSize: 10 }} axisLine={false} tickLine={false} domain={["auto", "auto"]} tickFormatter={v => `$${v < 0.01 ? v.toExponential(1) : v.toFixed(v < 1 ? 4 : 2)}`} width={80} />
-                      <Area type="monotone" dataKey="p" name="Price" stroke={selectedToken.positive ? "#16A34A" : "#DC2626"} fill="url(#gPrice)" strokeWidth={2.5} activeDot={{ r: 5, strokeWidth: 2, fill: "white", stroke: selectedToken.positive ? "#16A34A" : "#DC2626" }} />
-                      <Tooltip content={<ChartTooltip />} cursor={{ stroke: '#E5E7EB', strokeWidth: 1, strokeDasharray: '4 4' }} />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
+                 <div className="flex-1 -ml-4 -mr-2">
+                   <ResponsiveContainer width="100%" height="100%">
+                     <AreaChart data={priceHistory}>
+                       <defs>
+                         <linearGradient id="gPrice" x1="0" y1="0" x2="0" y2="1">
+                           <stop offset="0%" stopColor={selectedToken.positive ? "#16A34A" : "#DC2626"} stopOpacity={0.12} />
+                           <stop offset="100%" stopColor={selectedToken.positive ? "#16A34A" : "#DC2626"} stopOpacity={0} />
+                         </linearGradient>
+                       </defs>
+                       <CartesianGrid strokeDasharray="4 4" stroke="#E5E7EB" vertical={false} />
+                       <XAxis dataKey="t" tick={{ fill: "#9CA3AF", fontSize: 10, fontWeight: 500 }} axisLine={false} tickLine={false} tickMargin={12} />
+                       <YAxis tick={{ fill: "#6B7280", fontSize: 10, fontWeight: 500 }} axisLine={false} tickLine={false} domain={["auto", "auto"]} tickFormatter={v => `$${v < 0.01 ? v.toExponential(1) : v.toFixed(v < 1 ? 4 : 2)}`} width={80} />
+                       <Area type="monotone" dataKey="p" name="Price Matrix" stroke={selectedToken.positive ? "#16A34A" : "#DC2626"} fill="url(#gPrice)" strokeWidth={2} activeDot={{ r: 4, strokeWidth: 0, fill: selectedToken.positive ? "#16A34A" : "#DC2626" }} />
+                       <Tooltip content={<ChartTooltip />} cursor={{ stroke: '#E5E7EB', strokeWidth: 1, strokeDasharray: '4 4' }} />
+                     </AreaChart>
+                   </ResponsiveContainer>
+                 </div>
               </div>
 
               {/* AI Research Report */}
-              <div className={`border border-[#7C3AED]/15 ${CARD} relative overflow-hidden`}>
+              <div className={`border border-[#111827]/10 ${CARD} relative overflow-hidden bg-[#FAFBFC]/30`}>
                 {reportLoading ? (
                   <div className="py-24 text-center relative z-10 flex flex-col items-center justify-center">
-                    <div className="w-20 h-20 rounded-2xl bg-[#F8F9FB] border border-[#E5E7EB] flex items-center justify-center mb-6 relative overflow-hidden">
-                       <div className="absolute inset-0 bg-[#7C3AED]/5 animate-pulse"/>
-                       <RiLoader4Line className="text-[#7C3AED] text-4xl animate-spin relative z-10" />
+                    <div className="w-16 h-16 rounded-full bg-white border border-[#E5E7EB] shadow-sm flex items-center justify-center mb-6 relative overflow-hidden">
+                       <RiLoader4Line className="text-[#3B82F6] text-2xl animate-spin relative z-10" />
                     </div>
-                    <h3 className="text-[#111827] font-bold text-lg tracking-tight mb-2">Generating Research Report...</h3>
-                    <p className="text-[#6B7280] text-sm max-w-sm mx-auto font-medium">Analyzing on-chain data, liquidity structures, and market dynamics.</p>
+                    <h3 className="text-[#111827] font-medium text-[15px] tracking-tight mb-2">Assembling Neural Audit...</h3>
+                    <p className="text-[#6B7280] text-[12px] max-w-[280px] leading-relaxed mx-auto font-normal">Structuring logic layers, querying sentiment matrices, and finalizing security footprints.</p>
                   </div>
                 ) : aiReport ? (
-                  <div className="relative z-10 p-6 md:p-8">
+                  <div className="relative z-10 p-6 md:p-10">
                     <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-[#E5E7EB] pb-6 mb-8">
                       <div>
                         <div className="flex items-center gap-3 mb-2">
-                           <RiBrainLine className="text-[#7C3AED] text-2xl" />
-                           <h2 className="text-[#111827] font-black text-2xl tracking-tight">Research Report</h2>
+                           <RiShieldCheckLine className="text-[#111827] text-xl opacity-80" />
+                           <h2 className="text-[#111827] font-medium text-xl tracking-tight">Executive Audit</h2>
                         </div>
-                        <p className="text-[#9CA3AF] text-sm font-mono">ID: {selectedToken.address.slice(0,10)}... // GEN: INTELNODE-V1</p>
+                        <p className="text-[#9CA3AF] text-[10px] uppercase font-mono tracking-widest">UID: {selectedToken.address.slice(0,10)}... // INOD-V2</p>
                       </div>
                       <div className="flex gap-4">
                          <div className="text-right">
-                           <span className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-widest block mb-1">Risk Level</span>
-                           <span className="font-black text-lg uppercase px-3 py-1 rounded bg-[#F8F9FB] border border-[#E5E7EB]" style={{ color: RISK_COLORS[aiReport.riskLevel] }}>{aiReport.riskLevel}</span>
+                           <span className="text-[#9CA3AF] text-[9px] font-medium uppercase tracking-widest block mb-2">Risk Paradigm</span>
+                           <span className="font-mono text-[13px] font-medium uppercase px-3 py-1.5 rounded-lg border border-[#E5E7EB] bg-white shadow-sm" style={{ color: RISK_COLORS[aiReport.riskLevel] }}>{aiReport.riskLevel}</span>
                          </div>
                          <div className="text-right">
-                           <span className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-widest block mb-1">Recommendation</span>
-                           <span className="font-black text-lg uppercase px-3 py-1 rounded bg-[#F8F9FB] border border-[#E5E7EB]" style={{ color: REC_COLORS[aiReport.recommendation?.split(" ")[0]] }}>{aiReport.recommendation?.split(" — ")[0] || "UNKNOWN"}</span>
+                           <span className="text-[#9CA3AF] text-[9px] font-medium uppercase tracking-widest block mb-2">Stance</span>
+                           <span className="font-mono text-[13px] font-medium uppercase px-3 py-1.5 rounded-lg border border-[#E5E7EB] bg-white shadow-sm" style={{ color: REC_COLORS[aiReport.recommendation?.split(" ")[0]] }}>{aiReport.recommendation?.split(" — ")[0] || "UNKNOWN"}</span>
                          </div>
                       </div>
                     </div>
-                    <div className="space-y-8">
+                    
+                    <div className="space-y-10">
                       <div>
-                        <h4 className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2"><RiSparklingLine className="text-[#7C3AED]"/> Executive Summary</h4>
-                        <div className="text-[#111827] text-sm font-medium leading-relaxed bg-[#7C3AED]/[0.03] border-l-2 border-[#7C3AED] p-4 rounded-r-lg">
+                        <h4 className="text-[#9CA3AF] text-[9px] font-medium uppercase tracking-widest mb-4 flex items-center gap-2"><RiSparklingLine className="text-[#111827] opacity-60"/> Protocol Summary</h4>
+                        <div className="bg-white border border-[#E5E7EB] p-5 rounded-2xl shadow-sm text-[#4B5563]">
                           <MarkdownBlock text={aiReport.summary} />
                         </div>
                       </div>
+                      
                       <div className="grid md:grid-cols-2 gap-6">
-                        <div className="space-y-3">
-                           <h4 className="text-[#16A34A] text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5"><div className="w-1.5 h-1.5 bg-[#16A34A] rounded-full"/> Strengths</h4>
-                           <ul className="space-y-2.5">
-                            {aiReport.strengths?.map((s, i) => (
-                              <li key={i} className="text-[#6B7280] text-xs leading-relaxed font-medium bg-[#F8F9FB] border border-[#E5E7EB] p-3 rounded-xl flex items-start gap-3">
-                                <RiArrowRightUpLine className="text-[#16A34A] text-base shrink-0 mt-0.5" />
-                                <span>{s}</span>
-                              </li>
-                            ))}
-                          </ul>
+                        <div className="space-y-4">
+                           <h4 className="text-[#16A34A] text-[9px] font-medium uppercase tracking-widest flex items-center gap-2"><div className="w-1.5 h-1.5 bg-[#16A34A] rounded-full"/> Bullish Vectors</h4>
+                           <ul className="space-y-3">
+                             {aiReport.strengths?.map((s, i) => (
+                               <li key={i} className="text-[#4B5563] text-[12px] leading-relaxed font-normal bg-white border border-[#E5E7EB] p-4 rounded-xl flex items-start gap-3 shadow-sm hover:border-[#16A34A]/20 transition-colors">
+                                 <RiArrowRightUpLine className="text-[#16A34A] text-sm shrink-0 mt-0.5" />
+                                 <span>{s}</span>
+                               </li>
+                             ))}
+                           </ul>
                         </div>
-                        <div className="space-y-3">
-                           <h4 className="text-[#DC2626] text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5"><div className="w-1.5 h-1.5 bg-[#DC2626] rounded-full"/> Risks</h4>
-                           <ul className="space-y-2.5">
-                            {aiReport.risks?.map((r, i) => (
-                              <li key={i} className="text-[#6B7280] text-xs leading-relaxed font-medium bg-[#F8F9FB] border border-[#E5E7EB] p-3 rounded-xl flex items-start gap-3">
-                                <RiArrowRightDownLine className="text-[#DC2626] text-base shrink-0 mt-0.5" />
-                                <span>{r}</span>
-                              </li>
-                            ))}
-                          </ul>
+                        <div className="space-y-4">
+                           <h4 className="text-[#DC2626] text-[9px] font-medium uppercase tracking-widest flex items-center gap-2"><div className="w-1.5 h-1.5 bg-[#DC2626] rounded-full"/> Bearish Constraints</h4>
+                           <ul className="space-y-3">
+                             {aiReport.risks?.map((r, i) => (
+                               <li key={i} className="text-[#4B5563] text-[12px] leading-relaxed font-normal bg-white border border-[#E5E7EB] p-4 rounded-xl flex items-start gap-3 shadow-sm hover:border-[#DC2626]/20 transition-colors">
+                                 <RiArrowRightDownLine className="text-[#DC2626] text-sm shrink-0 mt-0.5" />
+                                 <span>{r}</span>
+                               </li>
+                             ))}
+                           </ul>
                         </div>
                       </div>
+                      
                       <div className="grid md:grid-cols-2 gap-6">
                         {[
-                          { title: "Liquidity Analysis", content: aiReport.liquidityAnalysis },
-                          { title: "Volume Dynamics", content: aiReport.volumeAnalysis },
-                          { title: "Narrative", content: aiReport.narrative },
-                          { title: "Price Action", content: aiReport.priceAction },
+                          { title: "Liquidity Blueprint", content: aiReport.liquidityAnalysis },
+                          { title: "Volume Distribution", content: aiReport.volumeAnalysis },
+                          { title: "Media Narrative", content: aiReport.narrative },
+                          { title: "Graph Action", content: aiReport.priceAction },
                         ].filter(s => s.content).map(section => (
-                          <div key={section.title} className="bg-[#F8F9FB] p-5 rounded-xl border border-[#E5E7EB]">
-                            <h4 className="text-[#111827] text-xs font-bold uppercase tracking-wider mb-3">{section.title}</h4>
+                          <div key={section.title} className="bg-white p-6 rounded-2xl border border-[#E5E7EB] shadow-sm">
+                            <h4 className="text-[#111827] text-[10px] font-medium uppercase tracking-widest mb-4 inline-block border-b border-[#E5E7EB] pb-1 bg-white">{section.title}</h4>
                             <MarkdownBlock text={section.content} />
                           </div>
                         ))}
                       </div>
+                      
                       {aiReport.keyInsights && (
                         <div>
-                          <h4 className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2"><RiStarLine className="text-[#F59E0B]"/> Key Insights</h4>
-                          <div className="grid sm:grid-cols-2 gap-3">
+                          <h4 className="text-[#111827] text-[10px] font-medium uppercase tracking-widest mb-4 flex items-center gap-2"><RiStarLine className="opacity-60"/> Tactical Learnings</h4>
+                          <div className="grid sm:grid-cols-2 gap-4">
                             {aiReport.keyInsights.map((insight, i) => (
-                              <div key={i} className="p-4 rounded-xl border border-[#F59E0B]/15 bg-[#F59E0B]/[0.03] flex items-start gap-3">
-                                <div className="w-5 h-5 rounded bg-[#F59E0B]/10 flex items-center justify-center shrink-0 mt-0.5"><span className="text-[#F59E0B] text-[10px] font-black">{i+1}</span></div>
-                                <span className="text-[#6B7280] text-xs leading-relaxed font-medium">{insight}</span>
+                              <div key={i} className="p-5 rounded-2xl border border-[#E5E7EB] bg-white shadow-sm flex items-start gap-4">
+                                <div className="w-5 h-5 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0 mt-0.5"><span className="text-[#111827] text-[9px] font-medium">{i+1}</span></div>
+                                <span className="text-[#4B5563] text-[12px] leading-relaxed font-normal">{insight}</span>
                               </div>
                             ))}
                           </div>
                         </div>
                       )}
+                      
                       {aiReport.recommendation?.includes(" — ") && (
-                        <div className="mt-8 pt-6 border-t border-[#E5E7EB]">
-                          <h4 className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2"><RiAlertLine className="text-[#111827]"/> Final Recommendation</h4>
-                          <div className="p-5 rounded-xl border border-[#7C3AED]/15 bg-[rgba(124,58,237,0.03)]">
+                        <div className="mt-8 pt-8 border-t border-[#E5E7EB]">
+                          <h4 className="text-[#111827] text-[10px] font-medium uppercase tracking-widest mb-4 flex items-center gap-2"><RiAlertLine className="opacity-60"/> Conclusive Directive</h4>
+                          <div className="p-6 rounded-2xl border border-[#E5E7EB] bg-white shadow-sm relative overflow-hidden">
+                             <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#111827] opacity-10" />
                             <MarkdownBlock text={aiReport.recommendation} />
                           </div>
                         </div>
@@ -604,13 +636,13 @@ export default function AnalyzerPage() {
                   </div>
                 ) : (
                   <div className="py-24 text-center relative z-10 px-6">
-                    <div className="w-24 h-24 rounded-2xl bg-[#F8F9FB] border border-[#E5E7EB] flex items-center justify-center mx-auto mb-6 group">
-                       <RiLockLine className="text-[#9CA3AF] text-4xl group-hover:text-[#7C3AED] transition-colors" />
+                    <div className="w-20 h-20 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center mx-auto mb-6 shadow-sm group">
+                       <RiLockLine className="text-[#9CA3AF] text-2xl group-hover:text-[#111827] transition-colors" />
                     </div>
-                    <h3 className="text-[#111827] font-black text-2xl tracking-tight mb-3">Report Locked</h3>
-                    <p className="text-[#6B7280] text-sm max-w-md mx-auto leading-relaxed mb-8">Unlock the full AI research report including risk profiling, market analysis, and actionable recommendations.</p>
-                    <button onClick={unlockReport} className="btn-intel px-10 py-4 inline-flex items-center gap-3 font-bold text-sm">
-                      <RiSparklingLine className="text-lg" /> Generate Report ({AI_REPORT_COST} INOD)
+                    <h3 className="text-[#111827] font-medium text-xl tracking-tight mb-3">Audit Firewall Active</h3>
+                    <p className="text-[#6B7280] text-[13px] max-w-sm mx-auto leading-relaxed mb-8 font-normal">Deploy tokens to decipher the complete neural assessment outlining risks, liquidity topologies, and concluding directions.</p>
+                    <button onClick={unlockReport} className="px-8 py-3.5 rounded-xl bg-[#111827] text-white flex items-center justify-center gap-2 text-[13px] font-medium shadow-md hover:bg-[#374151] transition-all mx-auto">
+                      <RiSparklingLine className="text-lg opacity-80" /> Execute Computation ({AI_REPORT_COST} INOD)
                     </button>
                   </div>
                 )}
