@@ -23,7 +23,6 @@ const FEATURES = [
   {
     id: "analyzer",
     tab: "AI Research",
-    icon: RiBrainLine,
     title: "Institution-Grade Intelligence Reports",
     subtitle: "Generate deep AI-powered audit reports on any token. Analyze liquidity, holder distribution, smart money flows, and narrative positioning with one click.",
     highlights: ["Protocol Deep Scan", "Risk Assessment Matrix", "Narrative Classification", "Holder Distribution Map"],
@@ -32,7 +31,6 @@ const FEATURES = [
   {
     id: "signals",
     tab: "Live Signals",
-    icon: RiRadarLine,
     title: "Real-Time Market Signal Detection",
     subtitle: "Monitor whale movements, liquidity spikes, and volume anomalies across 12+ chains. Algorithmically scored alerts delivered in milliseconds.",
     highlights: ["Whale Tracking", "Volume Anomaly Detection", "Smart Money Alerts", "Cross-Chain Monitoring"],
@@ -41,7 +39,6 @@ const FEATURES = [
   {
     id: "sentiment",
     tab: "Sentiment",
-    icon: RiBarChartBoxLine,
     title: "Multi-Layer Sentiment Intelligence",
     subtitle: "Aggregate social sentiment, on-chain momentum, and trading volume into a unified confidence matrix. Filter by sector, chain, or narrative.",
     highlights: ["Social Signal Aggregation", "Momentum Scoring", "Sector Heat Maps", "Confidence Indices"],
@@ -50,7 +47,6 @@ const FEATURES = [
   {
     id: "portfolio",
     tab: "Portfolio",
-    icon: RiShieldCheckLine,
     title: "Autonomous Portfolio Optimization",
     subtitle: "AI-driven portfolio construction and rebalancing. Track allocation health, risk exposure, and performance metrics with institutional precision.",
     highlights: ["Allocation Engine", "Risk Analytics", "Performance Tracking", "Smart Rebalancing"],
@@ -310,7 +306,7 @@ export default function Features() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15 }}
-          className="flex items-center justify-center gap-2 mb-10 md:mb-14"
+          className="flex items-center justify-center gap-2 mb-10 md:mb-14 overflow-x-scroll"
         >
           {FEATURES.map((f, i) => {
             const isActive = active === i;
@@ -318,7 +314,7 @@ export default function Features() {
               <button
                 key={f.id}
                 onClick={() => setActive(i)}
-                className={`relative px-5 py-2.5 rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.12em] font-semibold transition-all duration-300 ${
+                className={`relative px-5 py-2.5 rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.12em] font-semibold transition-all duration-300 text-nowrap ${
                   isActive
                     ? "bg-[#111827] text-white shadow-[0_2px_8px_rgba(17,24,39,0.2),0_1px_0_0_#0A0E17]"
                     : "text-[#6B7280] hover:text-[#111827] hover:bg-[#F8F9FB]"
@@ -352,9 +348,6 @@ export default function Features() {
                   const Icon = f.icon;
                   return (
                     <>
-                      <div className="w-10 h-10 rounded-xl border border-[#E5E7EB] bg-[#FAFBFC] flex items-center justify-center">
-                        <Icon className="text-[#7C3AED] text-lg" />
-                      </div>
                       <div>
                         <h3 className="text-[#111827] text-[16px] font-semibold tracking-tight">{f.title}</h3>
                         <p className="text-[#6B7280] text-[12px] font-normal leading-relaxed max-w-lg mt-0.5">{f.subtitle}</p>
