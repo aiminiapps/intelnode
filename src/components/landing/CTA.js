@@ -2,45 +2,85 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { RiTerminalBoxLine, RiArrowRightSLine, RiPulseLine } from "react-icons/ri";
+import { RiArrowRightUpLine, RiBookOpenLine } from "react-icons/ri";
+
+/* ═══════════════════════════════════════════
+   CROSSHATCH
+   ═══════════════════════════════════════════ */
+function CrosshatchStrip({ className = "", color = "rgba(0,0,0,0.03)", size = "8px" }) {
+  return <div className={className} style={{ backgroundImage: `repeating-linear-gradient(315deg, ${color} 0, ${color} 1px, transparent 0, transparent 50%)`, backgroundSize: `${size} ${size}` }} />;
+}
 
 export default function CTA() {
   return (
-    <section className="py-24 relative bg-transparent overflow-hidden">
-      <div className="max-w-5xl mx-auto px-6 relative z-10">
+    <section className="relative py-28 md:py-36 overflow-hidden bg-white">
+      {/* Subtle crosshatch */}
+      <CrosshatchStrip className="absolute inset-0 opacity-[0.3]" color="rgba(0,0,0,0.012)" size="24px" />
+
+      {/* Vertical gradient stripes — matching reference image accent */}
+      <div className="absolute top-0 right-[8%] bottom-0 w-[180px] md:w-[280px] overflow-hidden pointer-events-none opacity-[0.35]">
+        <div className="absolute inset-0 flex gap-[3px]">
+          {Array.from({ length: 28 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-full rounded-full"
+              style={{
+                width: "4px",
+                background: `linear-gradient(180deg, transparent 0%, rgba(124,58,237,${0.03 + i * 0.012}) 30%, rgba(124,58,237,${0.08 + i * 0.015}) 50%, rgba(124,58,237,${0.03 + i * 0.012}) 70%, transparent 100%)`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Left accent stripes */}
+      <div className="absolute top-0 left-[5%] bottom-0 w-[120px] md:w-[180px] overflow-hidden pointer-events-none opacity-[0.2]">
+        <div className="absolute inset-0 flex gap-[3px]">
+          {Array.from({ length: 18 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-full rounded-full"
+              style={{
+                width: "3px",
+                background: `linear-gradient(180deg, transparent 10%, rgba(124,58,237,${0.02 + i * 0.008}) 40%, rgba(124,58,237,${0.05 + i * 0.01}) 60%, transparent 90%)`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="relative z-10 max-w-[900px] mx-auto px-6 md:px-12 text-center">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="relative rounded-[2.5rem] border border-[#2A2A3A] bg-[#0A0A0F]/60 backdrop-blur-3xl p-10 md:p-20 text-center overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.5)] group"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
         >
-          {/* Premium Noise Overlay */}
-          <div 
-            className="absolute inset-0 opacity-[0.05] mix-blend-overlay pointer-events-none"
-            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-          />
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-[0.03] pointer-events-none" />
+          <h2 className="text-[clamp(2rem,5vw,3.4rem)] font-semibold text-[#111827] tracking-tight leading-[1.12] mb-10">
+            Let AI handle the research,<br />
+            you just stay ahead.
+          </h2>
 
-          <div className="relative z-10 flex flex-col items-center">
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6  tracking-tighter leading-none">
-              Initialize  
-              <span className="text-[#7C3AED]"> the Subsystem</span>
-            </h2>
-            
-            <p className="text-[#A1A1AA] text-sm md:text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
-              Synchronize your encrypted Web3 identity with the ChainOracle neural network. Extract pristine, high-conviction Alpha from the market noise before anyone else.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full">
-               <Link
-                 href="/app"
-                 className="btn-3d flex items-center justify-center gap-2 px-10 py-5 text-sm font-bold uppercase tracking-widest w-full sm:w-auto overflow-hidden relative"
-               >
-                 <span className="relative z-10 flex items-center gap-2">Launch App  <RiArrowRightSLine className="text-xl" /></span>
-               </Link>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/app"
+              className="group inline-flex items-center justify-center gap-2.5 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-white bg-[#111827] rounded-2xl transition-all duration-300 hover:bg-[#1F2937] active:scale-[0.98]"
+              style={{
+                boxShadow: "0 1px 0 0 rgba(255,255,255,0.06) inset, 0 4px 12px rgba(17,24,39,0.25), 0 8px 32px rgba(17,24,39,0.15), 0 2px 0 0 #0A0E17",
+              }}
+            >
+              <RiArrowRightUpLine className="text-[15px]" />
+              Launch App
+            </Link>
 
+            <Link
+              href="#features"
+              className="group inline-flex items-center justify-center gap-2.5 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#111827] bg-white border border-dashed border-[#D1D5DB] rounded-2xl transition-all duration-300 hover:border-[#111827] hover:bg-[#FAFBFC] active:scale-[0.98]"
+              style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}
+            >
+              <RiBookOpenLine className="text-[15px] opacity-60" />
+              Read Docs
+            </Link>
           </div>
         </motion.div>
       </div>

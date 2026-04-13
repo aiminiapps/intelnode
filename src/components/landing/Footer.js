@@ -2,18 +2,25 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { RiTwitterXLine, RiArrowRightUpLine, RiBnbFill } from "react-icons/ri";
+import { RiTwitterXLine, RiArrowRightUpLine, RiGithubLine, RiBookOpenLine } from "react-icons/ri";
 
 const footerLinks = {
   Product: [
-    { name: "AI Forecast", href: "/app/analyzer" },
-    { name: "Predictions", href: "/app/gems" },
-    { name: "Wallet Tracker", href: "/app/wallets" },
+    { name: "AI Research", href: "/app/analyzer" },
+    { name: "Intel Terminal", href: "/app/gems" },
     { name: "Signal Alerts", href: "/app/alerts" },
+    { name: "Sentiment Matrix", href: "/app/sentiment" },
+  ],
+  Resources: [
+    { name: "Documentation", href: "#" },
+    { name: "Whitepaper", href: "#" },
+    { name: "API Reference", href: "#" },
+    { name: "Changelog", href: "#" },
   ],
   Community: [
-    { name: "Twitter / X", href: "https://x.com/aichainoracle" },
-    { name: "Whitepaper", href: "https://chain-oracle.gitbook.io/chain-oracle-docs" }
+    { name: "Twitter / X", href: "https://x.com" },
+    { name: "Discord", href: "#" },
+    { name: "GitHub", href: "#" },
   ],
 };
 
@@ -21,59 +28,58 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-transparent pt-24 pb-12 relative overflow-hidden"> 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        
-        {/* Main Footer Content */}
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-16 mb-20">
-          
-          {/* Brand & Socials */}
-          <div className="max-w-sm">
-            <Link href="/" className="flex items-center gap-2.5 mb-6 group inline-flex">
-            <Image src="/logo.png" alt="Logo" width={160} height={32} />
-            
+    <footer className="bg-[#FAFBFC] border-t border-[#E5E7EB] relative overflow-hidden">
+      <div className="max-w-[1200px] mx-auto px-6 md:px-12 pt-16 pb-8 relative z-10">
+
+        {/* ── Main Grid ── */}
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 mb-14">
+
+          {/* Brand */}
+          <div className="max-w-xs">
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-5">
+              <Image src="/logo.png" alt="IntelNode" width={45} height={45} />
             </Link>
-            <p className="text-[#A1A1AA] text-sm leading-relaxed mb-8">
-              The premier AI-powered predictive analytics platform. Forecast token trends, discover alpha opportunities, and receive real-time signal intelligence before the crowd.
+            <p className="text-[#6B7280] text-[13px] leading-relaxed mb-6">
+              AI-powered on-chain intelligence platform. Research tokens, track smart money, and execute with institution-grade confidence.
             </p>
-            
-            {/* Minimal Socials */}
-            <div className="flex flex-wrap items-center gap-4">
-              <a
-                href="https://x.com/aichainoracle"
-                className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#0A0A0F] border border-[#2A2A3A] text-[#A1A1AA] hover:text-[#9F67FF] hover:border-[#7C3AED]/40 hover:bg-[#7C3AED]/5 transition-all duration-300"
-              >
-                <RiTwitterXLine className="text-lg" />
-                <span className="text-sm font-medium">Twitter / X</span>
-              </a>
-              <a
-                href="#"
-                className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#0A0A0F] border border-[#2A2A3A] text-[#A1A1AA] hover:text-[#9F67FF] hover:border-[#7C3AED]/40 hover:bg-[#7C3AED]/5 transition-all duration-300 group"
-              >
-                <div className="text-lg">
-                <RiBnbFill />
-                </div>
-                <span className="text-sm font-medium">BscScan</span>
-                <RiArrowRightUpLine className="text-xs opacity-50 group-hover:opacity-100" />
-              </a>
+
+            {/* Social links */}
+            <div className="flex items-center gap-2">
+              {[
+                { icon: RiTwitterXLine, href: "https://x.com", label: "Twitter" },
+                { icon: RiGithubLine, href: "#", label: "GitHub" },
+                { icon: RiBookOpenLine, href: "#", label: "Docs" },
+              ].map(s => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-xl border border-[#E5E7EB] bg-white flex items-center justify-center text-[#9CA3AF] hover:text-[#111827] hover:border-[#D1D5DB] transition-colors"
+                  aria-label={s.label}
+                >
+                  <s.icon className="text-sm" />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Links Grid */}
-          <div className="flex flex-wrap gap-16 md:gap-24 pt-2">
+          {/* Links */}
+          <div className="flex flex-wrap gap-12 md:gap-16 lg:gap-20">
             {Object.entries(footerLinks).map(([category, links]) => (
               <div key={category} className="flex flex-col">
-                <h4 className="text-white font-bold text-base mb-6 tracking-wide uppercase">
+                <h4 className="text-[#111827] font-semibold text-[12px] uppercase tracking-[0.14em] mb-5">
                   {category}
                 </h4>
-                <ul className="space-y-4">
+                <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.name}>
                       <Link
                         href={link.href}
-                        className="text-[#A1A1AA] text-sm hover:text-[#9F67FF] hover:translate-x-1 inline-block transition-all duration-300"
+                        className="text-[#6B7280] text-[13px] font-normal hover:text-[#111827] transition-colors inline-flex items-center gap-1"
                       >
                         {link.name}
+                        {link.href.startsWith("http") && <RiArrowRightUpLine className="text-[10px] opacity-40" />}
                       </Link>
                     </li>
                   ))}
@@ -83,11 +89,18 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="pt-8 border-t border-[#1C1C2E] flex items-center justify-center text-center">
-          <p className="text-[#6B6B76] text-sm tracking-wide">
-            © {currentYear} ChainOracle. All rights reserved.
+        {/* ── Bottom bar ── */}
+        <div className="pt-6 border-t border-dashed border-[#E5E7EB] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-[#9CA3AF] text-[12px] font-medium">
+            © {currentYear} IntelNode. All rights reserved.
           </p>
+          <div className="flex items-center gap-6">
+            {["Privacy Policy", "Terms of Service"].map(t => (
+              <Link key={t} href="#" className="text-[#9CA3AF] text-[12px] font-medium hover:text-[#111827] transition-colors">
+                {t}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
