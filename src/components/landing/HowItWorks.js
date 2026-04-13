@@ -1,316 +1,323 @@
 "use client";
 
-import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  RiWalletLine,
-  RiSearchLine,
-  RiServerLine,
-  RiCheckDoubleLine,
-  RiLoader4Line,
-  RiShieldCheckLine, RiTrophyLine, RiPulseLine
+  RiWalletLine, RiSearchEyeLine, RiBrainLine, RiLineChartLine,
+  RiArrowRightUpLine, RiCheckLine, RiShieldCheckLine, RiStarLine,
+  RiFlashlightLine, RiBarChartBoxLine, RiNodeTree,
 } from "react-icons/ri";
 
-const steps = [
+/* ═══════════════════════════════════════════
+   CROSSHATCH — Dark variant
+   ═══════════════════════════════════════════ */
+function CrosshatchStrip({ className = "", color = "rgba(255,255,255,0.03)", size = "8px" }) {
+  return <div className={className} style={{ backgroundImage: `repeating-linear-gradient(315deg, ${color} 0, ${color} 1px, transparent 0, transparent 50%)`, backgroundSize: `${size} ${size}` }} />;
+}
+
+/* ═══════════════════════════════════════════
+   STEPS DATA
+   ═══════════════════════════════════════════ */
+const STEPS = [
   {
-    id: "01",
-    title: "Initialize Oracle Link",
-    description: "Connect your Web3 identity to sync with ChainOracle's intelligence network.",
-    icon: RiWalletLine,
-    details: {
-      tag: "PHASE I",
-      heading: "Establish Secure Uplink",
-      text: "Instantly link your wallet with our encrypted subsystem. No personal data required—your on-chain identity serves as your universal secure key to the platform.",
-      visual: (
-        <div className="w-full h-[220px] bg-[#0A0A0F]/80 border border-[#2A2A3A]/50 rounded-2xl p-6 flex flex-col items-center justify-center relative shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-           <motion.div 
-             animate={{ y: [0, -5, 0] }} 
-             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-             className="w-20 h-20 rounded-full bg-[#141420] border border-[#2A2A3A] flex items-center justify-center relative z-10 shadow-[0_0_30px_#7C3AED40]"
-           >
-              <RiWalletLine className="text-[#9F67FF] text-3xl" />
-              <motion.div 
-                 initial={{ scale: 0 }}
-                 animate={{ scale: 1 }}
-                 transition={{ delay: 0.5, type: "spring" }}
-                 className="absolute -top-1 -right-1 w-5 h-5 bg-[#22C55E] rounded-full border-4 border-[#0A0A0F]" 
-              />
-           </motion.div>
-           <motion.div 
-             initial={{ opacity: 0, y: 10 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ delay: 0.8 }}
-             className="mt-6 text-center z-10"
-           >
-             <div className="text-white font-mono text-sm tracking-widest font-bold mb-1">AUTHENTICATED</div>
-             <div className="text-[#8E8E9A] text-xs font-mono">ID: 0x7F2...K9A4B</div>
-           </motion.div>
-        </div>
-      )
-    }
-  },
-  {
-    id: "02",
-    title: "Input Target Vector",
-    description: "Provide the smart contract or wallet address you want the AI to analyze.",
-    icon: RiSearchLine,
-    details: {
-      tag: "PHASE II",
-      heading: "Designate Your Target",
-      text: "Paste any token contract, liquidity pair, or wallet address. The Oracle Engine instantly locks onto the target across all supported networks.",
-      visual: (
-        <div className="w-full h-[220px] bg-[#0A0A0F]/80 border border-[#2A2A3A]/50 rounded-2xl p-8 flex flex-col justify-center relative shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-           <div className="relative z-10">
-              <div className="relative mb-6">
-                 <RiSearchLine className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F97316] text-xl" />
-                 <div className="w-full bg-[#141420] border border-[#F97316]/40 rounded-xl py-4 flex items-center pl-12 pr-4 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
-                    <span className="text-[#E0E0E0] font-mono text-xs overflow-hidden whitespace-nowrap">0x6982508145454Ce325dDbE47a25d4ec3d2311933</span>
-                    <motion.div animate={{ opacity: [1, 0, 1] }} transition={{ duration: 1, repeat: Infinity }} className="w-px h-5 bg-[#F97316] ml-1" />
-                 </div>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                 <div className="px-3 py-1.5 rounded-md bg-[#1C1C2E] border border-[#2A2A3A] text-[10px] text-white flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" /> Ethereum Network
-                 </div>
-                 <div className="px-3 py-1.5 rounded-md bg-[#1C1C2E] border border-[#2A2A3A] text-[10px] text-white flex items-center gap-1.5">
-                    <RiShieldCheckLine className="text-[#22C55E]" /> Target Verified
-                 </div>
-              </div>
-           </div>
-        </div>
-      )
-    }
-  },
-  {
-    id: "03",
-    title: "Neural Processing",
-    description: "The AI deeply scans liquidity, narrative sentiment, and holder distribution.",
-    icon: RiServerLine,
-    details: {
-      tag: "PHASE III",
-      heading: "Oracle Deep Scan Engaged",
-      text: "Our proprietary neural-net filters millions of on-chain data points in seconds. We analyze smart money wallets, check contract safety, and measure momentum volume organically.",
-      visual: (
-        <div className="w-full h-[220px] bg-[#0A0A0F]/80 border border-[#2A2A3A]/50 rounded-2xl p-6 flex flex-col justify-center relative shadow-[0_0_50px_rgba(0,0,0,0.5)] space-y-3">
-           {[
-             { label: "Validating Contract Integrity", delay: 0, color: "#22C55E" },
-             { label: "Mapping Smart Money Flows", delay: 0.5, color: "#3B82F6" },
-             { label: "Evaluating Social Narrative", delay: 1, color: "#9F67FF" }
-           ].map((task, i) => (
-             <div key={i} className="bg-[#141420] border border-[#2A2A3A] p-3 rounded-xl flex items-center gap-3 relative overflow-hidden">
-                <motion.div 
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 0 }}
-                  transition={{ delay: task.delay + 1, duration: 0.1 }}
-                  className="absolute inset-0 bg-[#1C1C2E] z-10 flex items-center justify-center text-[10px] text-[#A1A1AA] uppercase tracking-widest font-mono"
-                >
-                  <RiLoader4Line className="animate-spin text-lg" />
-                </motion.div>
-                
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: task.color, boxShadow: `0 0 8px ${task.color}` }} />
-                <div className="flex-1">
-                   <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-[#E0E0E0] text-[10px] uppercase font-bold tracking-wider">{task.label}</span>
-                      <span className="text-[#8E8E9A] text-[9px] font-mono">100%</span>
-                   </div>
-                   <div className="w-full h-1 bg-[#0A0A0F] rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: "0%" }}
-                        animate={{ width: "100%" }}
-                        transition={{ duration: 1, delay: task.delay, ease: "easeOut" }}
-                        className="h-full rounded-full"
-                        style={{ backgroundColor: task.color }}
-                      />
-                   </div>
-                </div>
-             </div>
-           ))}
-        </div>
-      )
-    }
-  },
-  {
-    id: "04",
-    title: "Extract Intelligence",
-    description: "Receive the final Alpha score with actionable, predictive insights.",
-    icon: RiCheckDoubleLine,
-    details: {
-      tag: "PHASE IV",
-      heading: "Execute with Absolute Confidence",
-      text: "The final intelligence report is compiled perfectly into the dashboard. Review the comprehensive probability matrix and act on the insights before the market moves.",
-      visual: (
-        <div className="w-full h-[220px] bg-[#0A0A0F]/80 border border-[#2A2A3A]/50 rounded-2xl p-6 flex flex-col justify-between relative shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden">
-           <div className="absolute top-0 left-0 w-1.5 h-full bg-[#22C55E]" />
-           
-           <div className="relative z-10 flex justify-between items-start">
-             <div>
-                <h4 className="text-white font-bold text-lg leading-tight uppercase tracking-wider mb-1">Target Resolved</h4>
-                <p className="text-[#8E8E9A] text-[10px] font-mono">ANALYSIS_COMPLETE : PASS</p>
-             </div>
-             <motion.div 
-               initial={{ scale: 0.8, opacity: 0 }}
-               animate={{ scale: 1, opacity: 1 }}
-               transition={{ type: "spring", delay: 0.3 }}
-               className="px-3 py-1 bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-[9px] font-black rounded uppercase tracking-widest shadow-[0_0_15px_rgba(34,197,94,0.2)]"
-             >
-               High Conviction
-             </motion.div>
-           </div>
-           
-           <div className="relative z-10 mt-auto flex items-end justify-between border-t border-[#2A2A3A] pt-4">
-              <div>
-                 <div className="text-[10px] text-[#A1A1AA] uppercase tracking-widest mb-1 font-mono">Forecast Score</div>
-                 <div className="flex items-end gap-1.5">
-                    <span className="text-5xl font-black text-white leading-none tracking-tighter shadow-sm text-transparent bg-clip-text bg-gradient-to-b from-white to-[#A1A1AA]">9.6</span>
-                    <span className="text-[#6B6B76] text-sm font-bold pb-1">/ 10</span>
-                 </div>
-              </div>
-              <motion.div 
-                animate={{ y: [0, -4, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-10 h-10 rounded-full bg-[#1C1C2E] border border-[#2A2A3A] flex items-center justify-center text-[#22C55E]"
+    num: "01",
+    label: "Connect",
+    title: "Link Your Wallet",
+    desc: "Start from any browser. Connect your Web3 wallet with a single click — IntelNode instantly syncs your on-chain identity as a universal key to the network.",
+    bullets: [
+      "Supports MetaMask, Phantom, WalletConnect & more",
+      "No personal data required — fully pseudonymous",
+      "Instantly unlocks your INOD credit balance",
+    ],
+    visual: (
+      <div className="w-full">
+        {/* Wallet connect mockup */}
+        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-6 backdrop-blur-sm">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-10 h-10 rounded-xl bg-[#7C3AED]/10 border border-[#7C3AED]/20 flex items-center justify-center">
+              <RiWalletLine className="text-[#A78BFA] text-lg" />
+            </div>
+            <div>
+              <div className="text-white text-[13px] font-semibold">IntelNode Gateway</div>
+              <div className="text-white/40 text-[10px] uppercase tracking-widest font-medium">Secure Uplink</div>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            {[
+              { name: "MetaMask", color: "#F6851B", status: "Popular" },
+              { name: "Phantom", color: "#AB9FF2", status: "Solana" },
+              { name: "WalletConnect", color: "#3B99FC", status: "Multi-Chain" },
+            ].map((w, i) => (
+              <motion.div
+                key={w.name}
+                initial={{ opacity: 0, x: 12 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.15 + i * 0.08 }}
+                className="flex items-center justify-between p-3 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
               >
-                 <RiPulseLine className="text-xl" />
+                <div className="flex items-center gap-3">
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${w.color}15`, border: `1px solid ${w.color}25` }}>
+                    <RiWalletLine style={{ color: w.color }} className="text-sm" />
+                  </div>
+                  <span className="text-white text-[12px] font-medium">{w.name}</span>
+                </div>
+                <span className="text-white/30 text-[9px] uppercase tracking-widest font-medium px-2 py-0.5 rounded border border-white/[0.06]">{w.status}</span>
               </motion.div>
-           </div>
+            ))}
+          </div>
         </div>
-      )
-    }
-  }
+      </div>
+    ),
+  },
+  {
+    num: "02",
+    label: "Search",
+    title: "Enter Any Token",
+    desc: "Paste a contract address or search by name. IntelNode locks onto the target across all supported networks and starts pulling real-time data instantly.",
+    bullets: [
+      "Supports token, pair, or wallet address lookup",
+      "Auto-detects chain and resolves to the top liquidity pool",
+      "Displays instant price, volume, and holder snapshots",
+    ],
+    visual: (
+      <div className="w-full">
+        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-6 backdrop-blur-sm">
+          {/* Search bar */}
+          <div className="relative mb-5">
+            <RiSearchEyeLine className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED] text-lg" />
+            <div className="w-full bg-white/[0.04] border border-[#7C3AED]/25 rounded-xl py-3.5 pl-12 pr-4 flex items-center">
+              <span className="text-white/70 font-mono text-[11px] truncate">0x6982508145454Ce325dDbE47a25d4ec3d2311933</span>
+              <motion.div animate={{ opacity: [1, 0, 1] }} transition={{ duration: 1.2, repeat: Infinity }} className="w-px h-4 bg-[#7C3AED] ml-1 shrink-0" />
+            </div>
+          </div>
+
+          {/* Resolved result */}
+          <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full border border-white/10 overflow-hidden bg-white/5">
+                  <img src="https://assets.coingecko.com/coins/images/29850/standard/pepe-token.jpeg" alt="PEPE" className="w-full h-full object-cover" />
+                </div>
+                <div>
+                  <div className="text-white text-[12px] font-semibold">PEPE</div>
+                  <div className="text-white/30 text-[9px] font-mono uppercase tracking-widest">Ethereum</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#16A34A]/10 border border-[#16A34A]/20">
+                <RiShieldCheckLine className="text-[#4ADE80] text-[10px]" />
+                <span className="text-[#4ADE80] text-[9px] font-medium uppercase tracking-widest">Verified</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              {[
+                { label: "Price", value: "$0.0000132" },
+                { label: "24h Vol", value: "$485M" },
+                { label: "Holders", value: "245K" },
+              ].map(m => (
+                <div key={m.label} className="flex flex-col">
+                  <span className="text-white/25 text-[8px] uppercase tracking-widest font-medium">{m.label}</span>
+                  <span className="text-white text-[11px] font-mono font-medium">{m.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    num: "03",
+    label: "Analyze",
+    title: "AI Deep Scan",
+    desc: "Our neural engine processes millions of on-chain data points in seconds — evaluating contract integrity, smart money patterns, social narrative, and liquidity structure.",
+    bullets: [
+      "Scans liquidity depth, holder concentration, and contract safety",
+      "Maps smart money wallets and accumulation patterns",
+      "Evaluates social sentiment and narrative positioning",
+    ],
+    visual: (
+      <div className="w-full">
+        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-6 backdrop-blur-sm">
+          <div className="flex items-center gap-2.5 mb-5">
+            <RiBrainLine className="text-[#A78BFA] text-lg" />
+            <span className="text-white text-[13px] font-semibold">Neural Processing Engine</span>
+          </div>
+
+          <div className="space-y-2.5">
+            {[
+              { label: "Contract Verification", pct: 100, color: "#16A34A", status: "Pass" },
+              { label: "Liquidity Analysis", pct: 92, color: "#7C3AED", status: "Deep" },
+              { label: "Smart Money Flow", pct: 78, color: "#3B82F6", status: "Active" },
+              { label: "Narrative Sentiment", pct: 85, color: "#F97316", status: "Bullish" },
+            ].map((task, i) => (
+              <div key={i} className="p-3 rounded-xl border border-white/[0.06] bg-white/[0.02]">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-white/60 text-[10px] uppercase tracking-widest font-medium">{task.label}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-white font-mono text-[10px] font-medium">{task.pct}%</span>
+                    <span className="text-[8px] uppercase tracking-widest font-medium px-1.5 py-0.5 rounded border" style={{ color: task.color, borderColor: `${task.color}30`, backgroundColor: `${task.color}10` }}>{task.status}</span>
+                  </div>
+                </div>
+                <div className="h-1 rounded-full bg-white/[0.06] overflow-hidden">
+                  <motion.div className="h-full rounded-full" style={{ backgroundColor: task.color }} initial={{ width: 0 }} whileInView={{ width: `${task.pct}%` }} viewport={{ once: true }} transition={{ duration: 1, delay: i * 0.15 }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    num: "04",
+    label: "Execute",
+    title: "Act on Intel",
+    desc: "Receive the final intelligence report with an Alpha Score, actionable insights, and predictive matrices — then execute your strategy with confidence before the market moves.",
+    bullets: [
+      "Structured AI report with probability matrices",
+      "Alpha Score rated across 6 intelligence vectors",
+      "Export, share, or track tokens for ongoing monitoring",
+    ],
+    visual: (
+      <div className="w-full">
+        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-6 backdrop-blur-sm relative overflow-hidden">
+          {/* Left accent */}
+          <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-transparent via-[#16A34A] to-transparent" />
+
+          <div className="flex items-center justify-between mb-5 pl-3">
+            <div>
+              <div className="text-white text-[14px] font-semibold">Intelligence Report</div>
+              <div className="text-white/30 text-[9px] uppercase tracking-widest font-medium font-mono">ANALYSIS_COMPLETE : PASS</div>
+            </div>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#16A34A]/10 border border-[#16A34A]/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4ADE80]" />
+              <span className="text-[#4ADE80] text-[9px] font-medium uppercase tracking-widest">High Conviction</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2.5 mb-5 pl-3">
+            {[
+              { label: "Alpha Score", value: "9.6", sub: "/10" },
+              { label: "Confidence", value: "94", sub: "%" },
+              { label: "Risk Level", value: "Low", sub: "" },
+            ].map(m => (
+              <div key={m.label} className="p-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-center">
+                <div className="text-white/30 text-[8px] uppercase tracking-widest font-medium mb-1">{m.label}</div>
+                <div className="text-white text-[20px] font-semibold font-mono leading-none">{m.value}<span className="text-white/25 text-[11px]">{m.sub}</span></div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2 pl-3">
+            {["Export PDF", "Track Token", "Share Report"].map(a => (
+              <div key={a} className="flex-1 py-2 rounded-xl border border-white/[0.06] bg-white/[0.02] text-center text-white/40 text-[9px] uppercase tracking-widest font-medium hover:bg-white/[0.05] transition-colors cursor-pointer">{a}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    ),
+  },
 ];
 
+/* ═══════════════════════════════════════════
+   MAIN COMPONENT
+   ═══════════════════════════════════════════ */
 export default function HowItWorks() {
-  const [activeStep, setActiveStep] = useState(0);
-
   return (
-    <section id="how-it-works" className="py-24 relative overflow-hidden bg-transparent">
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        
-        {/* Section Header */}
+    <section id="how-it-works" className="relative py-24 md:py-32 overflow-hidden bg-[#0F1219]">
+      {/* Background textures */}
+      <CrosshatchStrip className="absolute inset-0 opacity-30" color="rgba(255,255,255,0.012)" size="20px" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-12">
+
+        {/* ── Section Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-16 md:mb-24"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
-            How The <span className="text-[#7C3AED]">Oracle Works</span>
+          <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold text-white tracking-tight leading-tight mb-4">
+            How IntelNode works, from<br />
+            <span className="text-white/50">wallet to intel report</span>
           </h2>
+          <p className="text-white/35 text-[15px] font-normal leading-relaxed max-w-md mx-auto">
+            See how our neural engine transforms raw chain data into actionable intelligence in four seamless steps.
+          </p>
         </motion.div>
 
-        {/* Main Interface */}
-        <div className="bg-[#0A0A0F]/60 backdrop-blur-3xl border border-[#1E1E2E] rounded-[2rem] overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.5)] flex flex-col justify-between lg:flex-row min-h-[500px] relative group">
-          
-          {/* Premium Noise Overlay */}
-          <div 
-            className="absolute inset-0 opacity-[0.05] mix-blend-overlay pointer-events-none z-0"
-            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-          />
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-[0.03] pointer-events-none z-0" />
-          
-          {/* LEFT PANEL - Timeline/Stepper */}
-          <div className="lg:w-[45%] p-8 md:p-12 relative border-b lg:border-b-0 lg:border-r border-[#1E1E2E] flex flex-col justify-center">
-            
-            <div className="relative z-10 space-y-8">
-              {/* Stepper Line */}
-              <div className="absolute left-[28px] top-6 bottom-6 w-px bg-gradient-to-b from-transparent via-[#2A2A3A] to-transparent z-0" />
+        {/* ── Steps ── */}
+        <div className="space-y-0 relative">
+          {/* Vertical connecting line */}
+          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/[0.06] to-transparent pointer-events-none hidden md:block" />
 
-              {steps.map((step, index) => {
-                const isActive = activeStep === index;
-                const isPast = index < activeStep;
-                
-                return (
-                  <div 
-                    key={step.id} 
-                    className="relative z-10 flex gap-6 cursor-pointer group"
-                    onClick={() => setActiveStep(index)}
-                  >
-                    <div className="flex-shrink-0 relative">
-                      {/* Active Glow Ring */}
-                      {isActive && (
-                         <motion.div 
-                           layoutId="activeRing"
-                           className="absolute -inset-2 h-18 rounded-lg border border-[#7C3AED]/30 bg-[#7C3AED]/5"
-                           transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                         />
-                      )}
-                      <div className={`w-14 h-14 rounded-lg flex flex-col items-center justify-center transition-all duration-300 relative z-10 ${
-                        isActive 
-                          ? "bg-[#7C3AED]/10 border border-[#7C3AED]/50 shadow-[0_0_20px_rgba(124,58,237,0.3)]" 
-                          : isPast 
-                            ? "bg-[#141420] border-[#2A2A3A] border" 
-                            : "bg-[#0A0A0F] border-[#1E1E2E] border group-hover:border-[#3F3F46]"
-                      }`}>
-                        <span className={`text-[9px] font-bold tracking-widest leading-none mb-1 transition-colors ${isActive ? "text-[#9F67FF]" : isPast ? "text-[#6B6B76]" : "text-[#3F3F46]"}`}>
-                           {step.id}
-                        </span>
-                        <step.icon className={`text-lg transition-colors duration-300 ${
-                          isActive ? "text-[#E0E0E0]" : isPast ? "text-[#8E8E9A]" : "text-[#3F3F46]"
-                        }`} />
+          {STEPS.map((step, i) => {
+            const isEven = i % 2 === 0;
+
+            return (
+              <motion.div
+                key={step.num}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                className="relative"
+              >
+                {/* Step connector dot */}
+                <div className="absolute left-1/2 -translate-x-1/2 top-12 w-3 h-3 rounded-full bg-[#0F1219] border-2 border-white/10 z-20 hidden md:block">
+                  <div className="absolute inset-[3px] rounded-full bg-[#7C3AED]" />
+                </div>
+
+                {/* Content row */}
+                <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center py-12 md:py-20 ${isEven ? "" : "md:direction-rtl"}`}>
+
+                  {/* Text Side */}
+                  <div className={`${isEven ? "md:pr-16 md:text-right" : "md:pl-16 md:order-2"}`}>
+                    {/* Step number badge */}
+                    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] mb-5 ${isEven ? "md:ml-auto" : ""}`}>
+                      <RiFlashlightLine className="text-[#7C3AED] text-[10px]" />
+                      <span className="text-white/50 text-[10px] uppercase tracking-[0.16em] font-semibold">Step {step.num}</span>
+                    </div>
+
+                    <h3 className="text-white text-[24px] md:text-[28px] font-semibold tracking-tight leading-snug mb-3">
+                      {step.title}
+                    </h3>
+
+                    <p className="text-white/40 text-[14px] font-normal leading-relaxed mb-6 max-w-md"
+                       style={isEven ? { marginLeft: "auto" } : {}}>
+                      {step.desc}
+                    </p>
+
+                    {/* What happens here */}
+                    <div className={`${isEven ? "md:ml-auto" : ""} max-w-md`}>
+                      <div className="text-white/60 text-[11px] font-semibold mb-3">What happens here:</div>
+                      <div className="space-y-2">
+                        {step.bullets.map((b, bi) => (
+                          <div key={bi} className={`flex items-start gap-2.5 ${isEven ? "md:flex-row-reverse md:text-right" : ""}`}>
+                            <span className="w-[5px] h-[5px] rounded-full bg-[#7C3AED]/60 mt-1.5 shrink-0" />
+                            <span className="text-white/30 text-[12px] leading-relaxed">{b}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                    <div className="pt-2 flex-1 pr-4">
-                      <h4 className={`text-[17px] font-bold transition-all duration-300 ${
-                        isActive ? "text-white translate-x-1" : isPast ? "text-[#A1A1AA]" : "text-[#6B6B76]"
-                      }`}>
-                        {step.title}
-                      </h4>
-                      {isActive && (
-                        <motion.p 
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          className="text-[#8E8E9A] text-[13px] mt-2 leading-relaxed"
-                        >
-                          {step.description}
-                        </motion.p>
-                      )}
-                    </div>
                   </div>
-                )
-              })}
-            </div>
-          </div>
 
-          {/* RIGHT PANEL - Dynamic Visualizer */}
-          <div className="lg:w-[55%] relative overflow-hidden flex flex-col z-10 border-t lg:border-t-0 border-[#1E1E2E]/50">
-            {/* Background effects removed to favor noise/transparency */}
-            
-            <div className="flex-1 p-8 md:p-12 flex items-center justify-center">
-               <AnimatePresence mode="wait">
-                 <motion.div
-                   key={activeStep}
-                   initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-                   animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                   exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
-                   transition={{ duration: 0.4, ease: "easeOut" }}
-                   className="w-full max-w-sm"
-                 >
-                    {steps[activeStep].details.visual}
-                 </motion.div>
-               </AnimatePresence>
-            </div>
+                  {/* Visual Side */}
+                  <div className={`${isEven ? "md:pl-16 md:order-2" : "md:pr-16 md:order-1"}`}>
+                    {step.visual}
+                  </div>
+                </div>
 
-            {/* Bottom Text Description */}
-            <div className="p-8 md:p-12 border-t border-[#1E1E2E]/50 bg-transparent relative z-10">
-               <AnimatePresence mode="wait">
-                 <motion.div
-                   key={activeStep}
-                   initial={{ opacity: 0, y: 10 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   exit={{ opacity: 0, y: -10 }}
-                   transition={{ duration: 0.3 }}
-                 >
-                   <div className="flex items-center gap-3 mb-3">
-                      <span className="px-2 py-0.5 rounded bg-[#1C1C2E] border border-[#2A2A3A] text-[#7C3AED] text-[9px] font-black uppercase tracking-widest">{steps[activeStep].details.tag}</span>
-                   </div>
-                   <h3 className="text-xl font-bold text-white mb-2">{steps[activeStep].details.heading}</h3>
-                   <p className="text-[#8E8E9A] text-[13px] leading-relaxed max-w-md">{steps[activeStep].details.text}</p>
-                 </motion.div>
-               </AnimatePresence>
-            </div>
-          </div>
-
+                {/* Horizontal separator */}
+                {i < STEPS.length - 1 && (
+                  <div className="w-full max-w-2xl mx-auto h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
+                )}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
