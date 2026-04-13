@@ -2,133 +2,145 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import {
-  RiLineChartLine,
-  RiTrophyLine,
-  RiEyeLine,
-  RiNotification3Line,
-  RiFileChartLine,
-  RiCheckLine, RiLoader4Line, RiLinkM, RiStarLine,
-  RiBrainLine, RiDatabase2Line
+  RiLineChartLine, RiTrophyLine, RiEyeLine, RiNotification3Line,
+  RiFileChartLine, RiCheckLine, RiStarLine, RiBrainLine,
+  RiDatabase2Line, RiNodeTree, RiBarChartBoxLine, RiShieldCheckLine,
+  RiFlashlightLine, RiRadarLine, RiArrowRightUpLine
 } from "react-icons/ri";
 import { useState, useEffect } from "react";
 
-/* ─── VISUAL 1: Predictive AI Engine ─── */
-function PredictiveVisual() {
+/* ═══════════════════════════════════════════
+   CROSSHATCH STRIP
+   ═══════════════════════════════════════════ */
+function CrosshatchStrip({ className = "", color = "rgba(0,0,0,0.03)", size = "8px" }) {
+  return <div className={className} style={{ backgroundImage: `repeating-linear-gradient(315deg, ${color} 0, ${color} 1px, transparent 0, transparent 50%)`, backgroundSize: `${size} ${size}` }} />;
+}
+
+/* ═══════════════════════════════════════════
+   TAB-BASED FEATURE DATA
+   ═══════════════════════════════════════════ */
+const FEATURES = [
+  {
+    id: "analyzer",
+    tab: "AI Research",
+    icon: RiBrainLine,
+    title: "Institution-Grade Intelligence Reports",
+    subtitle: "Generate deep AI-powered audit reports on any token. Analyze liquidity, holder distribution, smart money flows, and narrative positioning with one click.",
+    highlights: ["Protocol Deep Scan", "Risk Assessment Matrix", "Narrative Classification", "Holder Distribution Map"],
+    visual: "analyzer",
+  },
+  {
+    id: "signals",
+    tab: "Live Signals",
+    icon: RiRadarLine,
+    title: "Real-Time Market Signal Detection",
+    subtitle: "Monitor whale movements, liquidity spikes, and volume anomalies across 12+ chains. Algorithmically scored alerts delivered in milliseconds.",
+    highlights: ["Whale Tracking", "Volume Anomaly Detection", "Smart Money Alerts", "Cross-Chain Monitoring"],
+    visual: "signals",
+  },
+  {
+    id: "sentiment",
+    tab: "Sentiment",
+    icon: RiBarChartBoxLine,
+    title: "Multi-Layer Sentiment Intelligence",
+    subtitle: "Aggregate social sentiment, on-chain momentum, and trading volume into a unified confidence matrix. Filter by sector, chain, or narrative.",
+    highlights: ["Social Signal Aggregation", "Momentum Scoring", "Sector Heat Maps", "Confidence Indices"],
+    visual: "sentiment",
+  },
+  {
+    id: "portfolio",
+    tab: "Portfolio",
+    icon: RiShieldCheckLine,
+    title: "Autonomous Portfolio Optimization",
+    subtitle: "AI-driven portfolio construction and rebalancing. Track allocation health, risk exposure, and performance metrics with institutional precision.",
+    highlights: ["Allocation Engine", "Risk Analytics", "Performance Tracking", "Smart Rebalancing"],
+    visual: "portfolio",
+  },
+];
+
+/* ═══════════════════════════════════════════
+   VISUAL SHOWCASES — One per tab
+   ═══════════════════════════════════════════ */
+
+/* Analyzer Visual — Report generation mockup */
+function AnalyzerVisual() {
   return (
-    <div className="w-full flex items-center justify-center pt-8">
-      <div className="w-full max-w-[320px] rounded-xl bg-[#0A0A0F] border border-[#2A2A3A] p-4 shadow-2xl relative overflow-hidden">
-        {/* Token header */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-sm bg-[#F97316]/10 border border-[#F97316]/20 flex items-center justify-center">
-              <RiLineChartLine className="text-[#F97316] text-xs" />
-            </div>
-            <div>
-              <div className="text-white text-[10px] font-bold">$ORACLE</div>
-              <div className="text-[#6B6B76] text-[8px]">AI Forecast</div>
-            </div>
+    <div className="w-full h-full flex items-start justify-center px-6 py-6">
+      <div className="w-full max-w-[520px]">
+        {/* Simulated report header */}
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-10 h-10 rounded-xl border border-[#E5E7EB] bg-[#FAFBFC] flex items-center justify-center">
+            <RiBrainLine className="text-[#7C3AED]" />
           </div>
-          <div className="text-[#F97316] text-[10px] font-bold bg-[#F97316]/10 border border-[#F97316]/20 px-2 py-0.5 rounded">
-            94% Probability
+          <div>
+            <div className="text-[#111827] text-[13px] font-semibold">$PEPE Deep Analysis</div>
+            <div className="text-[#9CA3AF] text-[10px] uppercase tracking-widest font-medium">AI Executive Audit — 6 Vectors</div>
+          </div>
+          <div className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-[#16A34A]/20 bg-[#16A34A]/5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A]" />
+            <span className="text-[#16A34A] text-[9px] font-medium uppercase tracking-widest">Complete</span>
           </div>
         </div>
 
-        {/* Mini predictive chart */}
-        <div className="h-[80px] relative overflow-hidden rounded bg-[#0D0D14] border border-[#1E1E2E] mb-3 p-1">
-          <svg className="w-full h-full overflow-visible" viewBox="0 0 200 50" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="predFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#F97316" stopOpacity="0.2" />
-                <stop offset="100%" stopColor="#F97316" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <motion.path
-              d="M0,40 C20,38 30,30 50,32 C70,34 80,20 100,22 C110,23 115,18 120,15 L120,50 L0,50 Z"
-              fill="url(#predFill)"
-              initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 1] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            />
-            <motion.path
-              d="M0,40 C20,38 30,30 50,32 C70,34 80,20 100,22 C110,23 115,18 120,15"
-              fill="none" stroke="#F97316" strokeWidth="2" strokeLinecap="round"
-              initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            />
-            <motion.path
-              d="M120,15 C140,10 160,8 180,5 C190,3 195,6 200,4"
-              fill="none" stroke="#F97316" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="4 3"
-              initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-              transition={{ duration: 1.5, delay: 2, repeat: Infinity, repeatDelay: 3.5 }}
-            />
-          </svg>
+        {/* Score bars */}
+        <div className="space-y-3">
+          {[
+            { label: "Liquidity Depth", score: 92, color: "#7C3AED" },
+            { label: "Holder Distribution", score: 78, color: "#3B82F6" },
+            { label: "Momentum Vector", score: 85, color: "#16A34A" },
+            { label: "Risk Assessment", score: 64, color: "#F97316" },
+          ].map((bar, i) => (
+            <div key={i}>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[#6B7280] text-[10px] uppercase tracking-widest font-medium">{bar.label}</span>
+                <span className="text-[#111827] text-[11px] font-semibold font-mono">{bar.score}%</span>
+              </div>
+              <div className="h-1.5 rounded-full bg-[#F3F4F6] overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ backgroundColor: bar.color }}
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${bar.score}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: i * 0.15, ease: "easeOut" }}
+                />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 }
 
-/* ─── VISUAL 2: Curated Alpha Feeds ─── */
-function FeedsVisual() {
-  const [step, setStep] = useState(0);
-  useEffect(() => {
-    const int = setInterval(() => setStep(s => (s + 1) % 3), 2000);
-    return () => clearInterval(int);
-  }, []);
-
+/* Signals Visual — Alert feed mockup */
+function SignalsVisual() {
   return (
-    <div className="w-full flex items-center justify-center pt-8 relative">
-      <div className="w-full max-w-[320px] rounded-xl bg-[#0A0A0F] border border-[#2A2A3A] p-4 shadow-2xl bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#22C55E]/5 to-transparent">
-        <div className="flex justify-between items-center mb-4">
-           <div className="text-white text-xs font-bold flex items-center gap-2"><RiTrophyLine className="text-[#22C55E]"/> Top Ranking Matrix</div>
-        </div>
-        
-        <div className="space-y-2">
-           {[ {t: "$NEIRO", tag: "Liquid", c: "#22C55E"}, {t: "$CORA", tag: "Momentum", c: "#3B82F6"}, {t: "$AIX", tag: "Volume", c: "#9F67FF"} ].map((item, i) => (
-             <motion.div 
-               key={i}
-               initial={false}
-               animate={{ opacity: step === i ? 1 : 0.4, borderColor: step === i ? `${item.c}50` : '#1E1E2E', backgroundColor: step === i ? `${item.c}10` : '#0D0D14' }}
-               className="p-2.5 rounded-lg border flex items-center justify-between transition-colors"
-             >
-                <div className="flex items-center gap-3">
-                   <div className="w-6 h-6 rounded bg-[#0A0A0F] border border-[#2A2A3A] flex justify-center items-center text-[8px] font-bold text-white">{i+1}</div>
-                   <div>
-                     <div className="text-white text-[11px] font-bold">{item.t}</div>
-                     <div className="text-[#8E8E9A] text-[9px]">{item.tag}</div>
-                   </div>
-                </div>
-                <div className="w-16 h-1 rounded bg-[#1E1E2E]">
-                   <motion.div className="h-full rounded" style={{ backgroundColor: item.c }} animate={{ width: step >= i ? "100%" : "30%" }} transition={{ duration: 1 }}/>
-                </div>
-             </motion.div>
-           ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─── VISUAL 3: Signal Alerts ─── */
-function AlertsVisual() {
-  return (
-    <div className="w-full h-[200px] flex items-center justify-center pt-8 relative">
-      <div className="relative w-full max-w-[280px] h-[120px]">
+    <div className="w-full h-full flex items-start justify-center px-6 py-6">
+      <div className="w-full max-w-[520px] space-y-2.5">
         {[
-          { color: "#3B82F6", icon: "🐋", text: "Whale accumulated 200 ETH", delay: 0 },
-          { color: "#7C3AED", icon: "📈", text: "Trend acceleration detected", delay: 2 },
-          { color: "#F97316", icon: "💎", text: "Early-stage momentum signal", delay: 4 },
+          { icon: "🐋", type: "Whale Accumulation", token: "$PEPE", detail: "200 ETH block purchase detected", color: "#16A34A", time: "2m ago" },
+          { icon: "📊", type: "Volume Anomaly", token: "$WIF", detail: "4.2x average volume spike on Solana", color: "#F97316", time: "8m ago" },
+          { icon: "💎", type: "Smart Money Entry", token: "$FLOKI", detail: "3 tracked wallets opened positions", color: "#3B82F6", time: "14m ago" },
+          { icon: "⚡", type: "Liquidity Surge", token: "$BONK", detail: "Pool depth increased by 340%", color: "#7C3AED", time: "22m ago" },
         ].map((alert, i) => (
           <motion.div
             key={i}
-            animate={{ y: [40, 0, 0, -40, -40, -80, -80], opacity: [0, 1, 1, 0.5, 0.5, 0, 0], scale: [0.9, 1, 1, 0.95, 0.95, 0.9, 0.9], zIndex: [3, 3, 3, 2, 2, 1, 1] }}
-            transition={{ repeat: Infinity, duration: 6, delay: alert.delay, times: [0, 0.08, 0.33, 0.41, 0.66, 0.74, 1], ease: "easeInOut" }}
-            className="absolute inset-x-0 top-1/2 -translate-y-1/2 rounded-xl bg-[#0A0A0F] border border-[#2A2A3A] p-3 flex items-center gap-3 shadow-xl"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            className="flex items-center gap-3 p-3.5 rounded-xl border border-dashed border-[#E5E7EB] bg-white hover:border-[#D1D5DB] transition-all"
           >
-            <div className="w-8 h-8 rounded border flex items-center justify-center text-sm shrink-0" style={{ backgroundColor: `${alert.color}10`, borderColor: `${alert.color}30` }}>{alert.icon}</div>
+            <div className="w-9 h-9 rounded-xl border border-[#E5E7EB] bg-[#FAFBFC] flex items-center justify-center text-sm shrink-0">{alert.icon}</div>
             <div className="flex-1 min-w-0">
-               <div className="text-white text-[11px] font-bold truncate">{alert.text}</div>
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="text-[#111827] text-[12px] font-medium">{alert.token}</span>
+                <span className="text-[9px] uppercase tracking-widest font-medium px-1.5 py-0.5 rounded-full border" style={{ color: alert.color, borderColor: `${alert.color}25`, backgroundColor: `${alert.color}06` }}>{alert.type}</span>
+              </div>
+              <span className="text-[#6B7280] text-[11px]">{alert.detail}</span>
             </div>
-            <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: alert.color, boxShadow: `0 0 6px ${alert.color}` }} />
+            <span className="text-[#9CA3AF] text-[9px] font-mono shrink-0">{alert.time}</span>
           </motion.div>
         ))}
       </div>
@@ -136,127 +148,282 @@ function AlertsVisual() {
   );
 }
 
-/* ─── VISUAL 4: Local Insights (Reports) ─── */
-function InsightsVisual() {
+/* Sentiment Visual — Heat matrix mockup */
+function SentimentVisual() {
+  const sectors = ["Layer 1", "DeFi", "AI & Data", "Gaming", "Meme"];
+  const metrics = ["Social", "Volume", "Momentum"];
+  const data = [
+    [88, 72, 91], [65, 84, 58], [92, 67, 79], [45, 53, 62], [96, 88, 94]
+  ];
+
   return (
-    <div className="w-full flex items-center justify-center pt-8">
-      <div className="w-full max-w-[320px] rounded-xl bg-[#0A0A0F] border border-[#2A2A3A] p-4 shadow-2xl relative">
-        <div className="flex gap-2 mb-4">
-           <div className="flex-1 p-2 rounded border border-[#1E1E2E] bg-[#0D0D14] flex flex-col gap-1 items-center justify-center">
-              <RiBrainLine className="text-[#7C3AED]"/>
-              <span className="text-[9px] text-white">Narrative</span>
-           </div>
-           <div className="flex-1 p-2 rounded border border-[#7C3AED]/30 bg-[#7C3AED]/10 flex flex-col gap-1 items-center justify-center">
-              <RiDatabase2Line className="text-[#7C3AED]"/>
-              <span className="text-[9px] text-white font-bold">Deep Scan</span>
-           </div>
+    <div className="w-full h-full flex items-start justify-center px-6 py-6">
+      <div className="w-full max-w-[520px]">
+        <div className="flex items-center gap-2 mb-5">
+          <RiBarChartBoxLine className="text-[#7C3AED] text-lg" />
+          <span className="text-[#111827] text-[13px] font-semibold">Sentiment Heat Matrix</span>
         </div>
+
+        {/* Matrix header */}
+        <div className="grid grid-cols-4 gap-2 mb-2">
+          <div />
+          {metrics.map(m => (
+            <div key={m} className="text-center text-[9px] uppercase tracking-widest font-medium text-[#9CA3AF]">{m}</div>
+          ))}
+        </div>
+
+        {/* Matrix rows */}
         <div className="space-y-2">
-           <div className="w-3/4 h-2 rounded bg-[#1E1E2E]"/>
-           <div className="w-full h-2 rounded bg-[#1E1E2E]"/>
-           <div className="w-5/6 h-2 rounded bg-[#1E1E2E]"/>
+          {sectors.map((sector, si) => (
+            <motion.div
+              key={sector}
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: si * 0.08 }}
+              className="grid grid-cols-4 gap-2 items-center"
+            >
+              <span className="text-[#111827] text-[11px] font-medium">{sector}</span>
+              {data[si].map((val, mi) => {
+                const color = val >= 80 ? "#16A34A" : val >= 60 ? "#3B82F6" : val >= 40 ? "#F97316" : "#DC2626";
+                return (
+                  <div key={mi} className="rounded-lg border border-[#E5E7EB] bg-[#FAFBFC] p-2 text-center relative overflow-hidden">
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] rounded-b-lg" style={{ backgroundColor: `${color}30` }}>
+                      <motion.div className="h-full rounded-b-lg" style={{ backgroundColor: color }} initial={{ width: 0 }} whileInView={{ width: `${val}%` }} viewport={{ once: true }} transition={{ duration: 0.8, delay: si * 0.08 + mi * 0.05 }} />
+                    </div>
+                    <span className="text-[12px] font-semibold font-mono" style={{ color }}>{val}</span>
+                  </div>
+                );
+              })}
+            </motion.div>
+          ))}
         </div>
-        <motion.div animate={{ opacity: [0, 1, 0] }} transition={{ duration: 2, repeat: Infinity }} className="mt-4 flex justify-center">
-           <div className="text-[10px] text-[#7C3AED] font-bold bg-[#7C3AED]/10 px-3 py-1 rounded-full border border-[#7C3AED]/30">Analyzing Node Data...</div>
-        </motion.div>
       </div>
     </div>
   );
 }
 
+/* Portfolio Visual — Allocation breakdown mockup */
+function PortfolioVisual() {
+  const allocations = [
+    { name: "ETH", pct: 35, color: "#7C3AED", change: "+4.2%" },
+    { name: "SOL", pct: 25, color: "#3B82F6", change: "+12.8%" },
+    { name: "PEPE", pct: 20, color: "#16A34A", change: "+28.1%" },
+    { name: "Others", pct: 20, color: "#9CA3AF", change: "+1.4%" },
+  ];
+
+  return (
+    <div className="w-full h-full flex items-start justify-center px-6 py-6">
+      <div className="w-full max-w-[520px]">
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-2">
+            <RiShieldCheckLine className="text-[#7C3AED] text-lg" />
+            <span className="text-[#111827] text-[13px] font-semibold">Portfolio Health</span>
+          </div>
+          <span className="text-[#16A34A] text-[13px] font-semibold font-mono flex items-center gap-1">
+            <RiArrowRightUpLine className="text-sm" /> +8.4%
+          </span>
+        </div>
+
+        {/* Allocation bar */}
+        <div className="h-3 rounded-full overflow-hidden flex mb-5 bg-[#F3F4F6]">
+          {allocations.map((a, i) => (
+            <motion.div
+              key={a.name}
+              className="h-full first:rounded-l-full last:rounded-r-full"
+              style={{ backgroundColor: a.color }}
+              initial={{ width: 0 }}
+              whileInView={{ width: `${a.pct}%` }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: i * 0.1 }}
+            />
+          ))}
+        </div>
+
+        {/* Allocation list */}
+        <div className="space-y-2">
+          {allocations.map((a, i) => (
+            <motion.div
+              key={a.name}
+              initial={{ opacity: 0, x: -12 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="flex items-center justify-between p-3 rounded-xl border border-[#E5E7EB] bg-[#FAFBFC]"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-2.5 h-8 rounded-full" style={{ backgroundColor: a.color }} />
+                <div>
+                  <span className="text-[#111827] text-[12px] font-semibold block">{a.name}</span>
+                  <span className="text-[#9CA3AF] text-[10px] font-mono">{a.pct}% Allocation</span>
+                </div>
+              </div>
+              <span className="text-[#16A34A] text-[11px] font-semibold font-mono">{a.change}</span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const VISUAL_MAP = {
+  analyzer: <AnalyzerVisual />,
+  signals: <SignalsVisual />,
+  sentiment: <SentimentVisual />,
+  portfolio: <PortfolioVisual />,
+};
+
 /* ═══════════════════════════════════════════
    MAIN FEATURES COMPONENT
    ═══════════════════════════════════════════ */
 export default function Features() {
-
-  const bentoGrid = [
-    {
-       color: "#F97316",
-       title: "Forecast market movements with high precision",
-       desc: "Our neural engine intelligently breaks down historical data and real-time liquidity to create accurate trend analysis.",
-       visual: <PredictiveVisual />
-    },
-    {
-       color: "#22C55E",
-       title: "Automated ranking of top performance signals",
-       desc: "AI dynamically filters the market to identify the 'Best of the Week' and 'Best of the Month' based on momentum.",
-       visual: <FeedsVisual />
-    },
-    {
-       color: "#3B82F6",
-       title: "Easily track and analyze smart money",
-       desc: "Visualize complex on-chain behavior with ease. AI works on every token and returns results in a structured feed.",
-       visual: <AlertsVisual />
-    },
-    {
-       color: "#7C3AED",
-       title: "Run detailed analysis entirely within your browser",
-       desc: "Run deep document and contract analysis efficiently. Perfect for users focused on speed, privacy, and precision.",
-       visual: <InsightsVisual />
-    }
-  ];
+  const [active, setActive] = useState(0);
 
   return (
-    <section id="features" className="py-24 relative overflow-hidden bg-transparent">
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        
-        {/* Section header */}
+    <section id="features" className="py-24 md:py-32 relative overflow-hidden bg-white">
+      {/* Subtle background */}
+      <CrosshatchStrip className="absolute inset-0 opacity-[0.3]" color="rgba(0,0,0,0.012)" size="24px" />
+
+      <div className="max-w-[1200px] mx-auto px-6 md:px-12 relative z-10">
+
+        {/* ── Section Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16 md:mb-24"
+          className="text-center mb-14 md:mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
-            Oracle <span className="text-[#7C3AED]">Main Features</span>
+          <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold text-[#111827] tracking-tight leading-tight mb-4">
+            The control center for your<br />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#7C3AED] to-[#6D28D9]">on-chain intelligence</span>
           </h2>
+          <p className="text-[#6B7280] text-[15px] font-normal leading-relaxed max-w-md mx-auto">
+            Research, signals, and portfolio tools that keep your edge sharp and consistent.
+          </p>
         </motion.div>
 
-        {/* ═══════ 2x2 BENTO GRID ═══════ */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {bentoGrid.map((feature, idx) => (
+        {/* ── Tab Bar ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.15 }}
+          className="flex items-center justify-center gap-2 mb-10 md:mb-14"
+        >
+          {FEATURES.map((f, i) => {
+            const isActive = active === i;
+            return (
+              <button
+                key={f.id}
+                onClick={() => setActive(i)}
+                className={`relative px-5 py-2.5 rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.12em] font-semibold transition-all duration-300 ${
+                  isActive
+                    ? "bg-[#111827] text-white shadow-[0_2px_8px_rgba(17,24,39,0.2),0_1px_0_0_#0A0E17]"
+                    : "text-[#6B7280] hover:text-[#111827] hover:bg-[#F8F9FB]"
+                }`}
+              >
+                {f.tab}
+              </button>
+            );
+          })}
+        </motion.div>
+
+        {/* ── Content Panel ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.25 }}
+          className="relative"
+        >
+          {/* Outer dashed frame */}
+          <div className="absolute -inset-3 md:-inset-4 rounded-[32px] border border-dashed border-[#E5E7EB]/70 pointer-events-none" />
+
+          {/* Main card */}
+          <div className="rounded-3xl border border-[#E5E7EB] bg-white overflow-hidden shadow-[0_4px_40px_rgba(0,0,0,0.04)]">
+            
+            {/* Top info bar */}
+            <div className="border-b border-[#E5E7EB] px-8 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                {(() => {
+                  const f = FEATURES[active];
+                  const Icon = f.icon;
+                  return (
+                    <>
+                      <div className="w-10 h-10 rounded-xl border border-[#E5E7EB] bg-[#FAFBFC] flex items-center justify-center">
+                        <Icon className="text-[#7C3AED] text-lg" />
+                      </div>
+                      <div>
+                        <h3 className="text-[#111827] text-[16px] font-semibold tracking-tight">{f.title}</h3>
+                        <p className="text-[#6B7280] text-[12px] font-normal leading-relaxed max-w-lg mt-0.5">{f.subtitle}</p>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+
+              {/* Highlight pills */}
+              <div className="flex flex-wrap gap-2 shrink-0">
+                {FEATURES[active].highlights.map((h, i) => (
+                  <span key={i} className="text-[9px] uppercase tracking-widest font-medium text-[#6B7280] border border-dashed border-[#D1D5DB] bg-[#FAFBFC] px-3 py-1.5 rounded-full">
+                    {h}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Visual showcase area */}
+            <div className="relative min-h-[360px] md:min-h-[400px] bg-[#FAFBFC]">
+              {/* Gradient accents — like the reference image */}
+              <div className="absolute top-0 right-0 w-[40%] h-full overflow-hidden pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-l from-[#EDE9FE]/40 via-[#F5F3FF]/20 to-transparent" />
+                <CrosshatchStrip className="absolute inset-0 opacity-30" color="rgba(124,58,237,0.04)" size="6px" />
+              </div>
+
+              {/* Vertical stripe accents — matching the reference */}
+              <div className="absolute top-0 right-[15%] w-[1px] h-full bg-gradient-to-b from-transparent via-[#7C3AED]/10 to-transparent pointer-events-none" />
+              <div className="absolute top-0 right-[25%] w-[1px] h-full bg-gradient-to-b from-transparent via-[#7C3AED]/6 to-transparent pointer-events-none" />
+
+              {/* Visual content */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={active}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.35 }}
+                  className="relative z-10 w-full h-full"
+                >
+                  {VISUAL_MAP[FEATURES[active].visual]}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ── Bottom feature cards — quick info grid ── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 md:mt-16">
+          {[
+            { icon: RiFlashlightLine, label: "Sub-Second Alerts", desc: "Instant anomaly detection" },
+            { icon: RiNodeTree, label: "12+ Chains", desc: "Cross-chain coverage" },
+            { icon: RiDatabase2Line, label: "50K+ Tokens", desc: "Comprehensive dataset" },
+            { icon: RiEyeLine, label: "Always Watching", desc: "24/7 monitoring network" },
+          ].map((item, i) => (
             <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
+              key={item.label}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="rounded-3xl border border-[#1E1E2E] bg-[#0A0A0F]/60 backdrop-blur-3xl p-8 md:p-10 flex flex-col justify-between overflow-hidden group hover:border-[#2A2A3A] transition-all duration-500 relative"
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="p-5 rounded-2xl border border-dashed border-[#E5E7EB] bg-white hover:border-[#D1D5DB] hover:shadow-sm transition-all text-center group"
             >
-               {/* Premium Noise Overlay */}
-               <div 
-                 className="absolute inset-0 opacity-[0.05] mix-blend-overlay pointer-events-none"
-                 style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-               />
-               <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-[0.03] pointer-events-none" />
-
-               {/* Top Content (Text) */}
-               <div className="relative z-10 mb-8">                  
-                  {/* Title & Desc */}
-                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 pr-4 leading-[1.3] text-balance">
-                     {feature.title}
-                  </h3>
-                  <p className="text-[#8E8E9A] text-sm md:text-[15px] leading-relaxed pr-8">
-                     {feature.desc}
-                  </p>
-               </div>
-
-               {/* Bottom Content (Visual Container) */}
-               <div className="relative z-10 flex-1 flex flex-col justify-end mt-4">
-                  <div className="w-full bg-[#0A0A0F] border border-[#1E1E2E] rounded-2xl overflow-hidden relative shadow-[0_-10px_40px_rgba(0,0,0,0.5)] h-[220px]">
-                     {/* Window UI Header */}
-                     <div className="absolute top-0 inset-x-0 h-6 bg-[#0D0D14] border-b border-[#1E1E2E] flex items-center px-3 gap-1.5 z-20">
-                        <div className="w-2 h-2 rounded-full bg-[#3F3F46]" />
-                        <div className="w-2 h-2 rounded-full bg-[#3F3F46]" />
-                        <div className="w-2 h-2 rounded-full bg-[#3F3F46]" />
-                     </div>
-                     {/* Visual Content mapped exactly to the box constraint */}
-                     <div className="absolute inset-0 pt-6">
-                        {feature.visual}
-                     </div>
-                  </div>
-               </div>
+              <div className="w-10 h-10 rounded-xl border border-[#E5E7EB] bg-[#FAFBFC] flex items-center justify-center mx-auto mb-3 group-hover:bg-[#111827] group-hover:border-[#111827] transition-colors">
+                <item.icon className="text-[#9CA3AF] text-lg group-hover:text-white transition-colors" />
+              </div>
+              <h4 className="text-[#111827] text-[13px] font-semibold mb-1">{item.label}</h4>
+              <p className="text-[#9CA3AF] text-[11px] font-medium">{item.desc}</p>
             </motion.div>
           ))}
         </div>

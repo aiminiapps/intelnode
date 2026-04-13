@@ -37,7 +37,7 @@ export default function Navbar() {
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 relative z-10 group pl-1">
-            <Image src="/logo.png" alt="Logo" width={160} height={32} />
+            <Image src="/logo.png" alt="Logo" width={45} height={45} />
           </Link>
 
           {/* Desktop Links */}
