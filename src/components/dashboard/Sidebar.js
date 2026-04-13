@@ -17,6 +17,7 @@ import {
 } from "react-icons/ri";
 import { NAV_ITEMS } from "@/lib/constants";
 import { useTokens } from "@/context/TokenContext";
+import Image from "next/image";
 
 const MAIN_NAV = NAV_ITEMS.slice(0, 3);
 const ADVANCED_NAV = NAV_ITEMS.slice(3, 6);
@@ -130,18 +131,14 @@ export default function Sidebar() {
       <div className="px-4 pt-5 pb-4 flex items-center justify-between relative">
         <Link href="/" className="flex items-center gap-2.5 group">
           {/* Logo mark — black with crosshatch texture */}
-          <div className="w-9 h-9 rounded-sm bg-[#111827] flex items-center justify-center relative overflow-hidden shadow-sm">
+          <div>
             {/* Subtle crosshatch on logo bg */}
             <CrosshatchStrip
               className="absolute inset-0 opacity-20 pointer-events-none"
               color="rgba(255,255,255,0.15)"
               size="5px"
             />
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="relative z-10">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" opacity="0.9"/>
-              <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+           <Image src="/logo.png" alt="Logo" width={30} height={30} />
           </div>
           {(!collapsed || mobile) && (
             <div>
