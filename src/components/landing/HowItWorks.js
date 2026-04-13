@@ -2,9 +2,7 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import {
-  RiWalletLine, RiSearchEyeLine, RiBrainLine, RiLineChartLine,
-  RiArrowRightUpLine, RiCheckLine, RiShieldCheckLine, RiStarLine,
-  RiFlashlightLine, RiBarChartBoxLine, RiNodeTree,
+  RiWalletLine, RiSearchEyeLine, RiBrainLine, RiShieldCheckLine,
 } from "react-icons/ri";
 
 /* ═══════════════════════════════════════════
@@ -22,10 +20,10 @@ const STEPS = [
     num: "01",
     label: "Connect",
     title: "Link Your Wallet",
-    desc: "Start from any browser. Connect your Web3 wallet with a single click — IntelNode instantly syncs your on-chain identity as a universal key to the network.",
+    desc: "Start from any browser. Connect your Web3 wallet with a single click IntelNode instantly syncs your on chain identity as a universal key to the network.",
     bullets: [
       "Supports MetaMask, Phantom, WalletConnect & more",
-      "No personal data required — fully pseudonymous",
+      "No personal data required fully pseudonymous",
       "Instantly unlocks your INOD credit balance",
     ],
     visual: (
@@ -130,7 +128,7 @@ const STEPS = [
     num: "03",
     label: "Analyze",
     title: "AI Deep Scan",
-    desc: "Our neural engine processes millions of on-chain data points in seconds — evaluating contract integrity, smart money patterns, social narrative, and liquidity structure.",
+    desc: "Our neural engine processes millions of on-chain data points in seconds evaluating contract integrity, smart money patterns, social narrative, and liquidity structure.",
     bullets: [
       "Scans liquidity depth, holder concentration, and contract safety",
       "Maps smart money wallets and accumulation patterns",
@@ -173,7 +171,7 @@ const STEPS = [
     num: "04",
     label: "Execute",
     title: "Act on Intel",
-    desc: "Receive the final intelligence report with an Alpha Score, actionable insights, and predictive matrices — then execute your strategy with confidence before the market moves.",
+    desc: "Receive the final intelligence report with an Alpha Score, actionable insights, and predictive matrices then execute your strategy with confidence before the market moves.",
     bullets: [
       "Structured AI report with probability matrices",
       "Alpha Score rated across 6 intelligence vectors",
@@ -278,7 +276,6 @@ export default function HowItWorks() {
                   <div className={`${isEven ? "md:pr-16 md:text-right" : "md:pl-16 md:order-2"}`}>
                     {/* Step number badge */}
                     <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] mb-5 ${isEven ? "md:ml-auto" : ""}`}>
-                      <RiFlashlightLine className="text-[#7C3AED] text-[10px]" />
                       <span className="text-white/50 text-[10px] uppercase tracking-[0.16em] font-semibold">Step {step.num}</span>
                     </div>
 
