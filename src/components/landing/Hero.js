@@ -116,28 +116,10 @@ export default function Hero() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col items-start text-left relative z-20"
           >
-            {/* Status badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-dashed border-[#D1D5DB] bg-[#FAFBFC] mb-8"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
-              <span className="text-[10px] uppercase tracking-[0.16em] font-medium text-[#6B7280]">Live Intelligence Network</span>
-            </motion.div>
-
             {/* Headline */}
             <h1 className="text-[clamp(2.4rem,5.5vw,4.2rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#111827] mb-6">
-              <span className="block">Unlock True</span>
-              <span className="block">Alpha From</span>
-              <span className="block relative">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#7C3AED] via-[#6D28D9] to-[#9F67FF]">Any Token</span>
-                {/* Decorative underline accent */}
-                <svg className="absolute -bottom-2 left-0 w-[200px] h-3" viewBox="0 0 200 12" fill="none">
-                  <path d="M2 8C30 3 70 2 100 5C130 8 170 6 198 3" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeDasharray="4 4" opacity="0.4" />
-                </svg>
-              </span>
+              <span className="">Unlock True Alpha From</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#7C3AED] via-[#6D28D9] to-[#9F67FF]"> Any Token</span>
             </h1>
 
             {/* Subtitle */}
