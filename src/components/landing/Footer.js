@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { RiTwitterXLine, RiArrowRightUpLine, RiGithubLine, RiBookOpenLine } from "react-icons/ri";
+import { RiTwitterXLine, RiArrowRightUpLine, RiBookOpenLine } from "react-icons/ri";
+import { SiBnbchain } from "react-icons/si";
 
 const footerLinks = {
   Product: [
@@ -11,16 +12,9 @@ const footerLinks = {
     { name: "Signal Alerts", href: "/app/alerts" },
     { name: "Sentiment Matrix", href: "/app/sentiment" },
   ],
-  Resources: [
-    { name: "Documentation", href: "#" },
-    { name: "Whitepaper", href: "#" },
-    { name: "API Reference", href: "#" },
-    { name: "Changelog", href: "#" },
-  ],
   Community: [
     { name: "Twitter / X", href: "https://x.com" },
-    { name: "Discord", href: "#" },
-    { name: "GitHub", href: "#" },
+    { name: "BscScan", href: "#" },
   ],
 };
 
@@ -47,8 +41,7 @@ export default function Footer() {
             <div className="flex items-center gap-2">
               {[
                 { icon: RiTwitterXLine, href: "https://x.com", label: "Twitter" },
-                { icon: RiGithubLine, href: "#", label: "GitHub" },
-                { icon: RiBookOpenLine, href: "#", label: "Docs" },
+                { icon: SiBnbchain, href: "#", label: "BscScan" },
               ].map(s => (
                 <a
                   key={s.label}
