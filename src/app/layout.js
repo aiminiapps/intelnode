@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://www.intelnode.io"),
+  metadataBase: new URL("https://www.intel-node.xyz"),
   title: "IntelNode ($INOD) — Crypto Intelligence Hub",
   description: "A comprehensive crypto intelligence hub providing automated, institution-grade research reports on various crypto projects. Powered by AI-driven analytics and gated by the $INOD token ecosystem.",
   keywords: ["crypto", "AI", "intelligence", "blockchain", "DeFi", "research", "INOD", "IntelNode", "token analytics"],
@@ -20,7 +20,7 @@ export const metadata = {
   openGraph: {
     title: "IntelNode ($INOD) — Crypto Intelligence Hub",
     description: "Institution-grade crypto research powered by AI. Automated analytics, signal intelligence, and gated research reports.",
-    url: "https://www.intelnode.io",
+    url: "https://www.intel-node.xyz",
     siteName: "IntelNode",
     images: [
       {
@@ -37,12 +37,12 @@ export const metadata = {
     card: "summary_large_image",
     title: "IntelNode ($INOD) — Crypto Intelligence Hub",
     description: "Institution-grade crypto research powered by AI. Automated analytics, signal intelligence, and gated research reports.",
-    creator: "@intelnode",
-    site: "@intelnode",
+    creator: "@intelnode_ai",
+    site: "@intelnode_ai",
     images: ["/og.png"],
   },
   alternates: {
-    canonical: "https://www.intelnode.io",
+    canonical: "https://www.intel-node.xyz",
   },
 };
 
@@ -51,22 +51,22 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.intelnode.io/#organization",
+      "@id": "https://www.intel-node.xyz/#organization",
       name: "IntelNode",
-      url: "https://www.intelnode.io",
-      logo: "https://www.intelnode.io/agent.png",
+      url: "https://www.intel-node.xyz",
+      logo: "https://www.intel-node.xyz/agent.png",
       sameAs: [
-        "https://x.com/intelnode",
+        "https://x.com/intelnode_ai",
       ]
     },
     {
       "@type": "WebSite",
-      "@id": "https://www.intelnode.io/#website",
-      url: "https://www.intelnode.io",
+      "@id": "https://www.intel-node.xyz/#website",
+      url: "https://www.intel-node.xyz",
       name: "IntelNode ($INOD) — Crypto Intelligence Hub",
       description: "A comprehensive crypto intelligence hub providing automated, institution-grade research reports powered by AI analytics.",
       publisher: {
-        "@id": "https://www.intelnode.io/#organization"
+        "@id": "https://www.intel-node.xyz/#organization"
       }
     }
   ]
@@ -89,4 +89,3 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-
