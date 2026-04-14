@@ -17,35 +17,24 @@ export default function CTA() {
       {/* Subtle crosshatch */}
       <CrosshatchStrip className="absolute inset-0 opacity-[0.3]" color="rgba(0,0,0,0.012)" size="24px" />
 
-      {/* Vertical gradient stripes — matching reference image accent */}
-      <div className="absolute top-0 right-[8%] bottom-0 w-[180px] md:w-[280px] overflow-hidden pointer-events-none opacity-[0.35]">
-        <div className="absolute inset-0 flex gap-[3px]">
-          {Array.from({ length: 28 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-full rounded-full"
-              style={{
-                width: "4px",
-                background: `linear-gradient(180deg, transparent 0%, rgba(124,58,237,${0.03 + i * 0.012}) 30%, rgba(124,58,237,${0.08 + i * 0.015}) 50%, rgba(124,58,237,${0.03 + i * 0.012}) 70%, transparent 100%)`,
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Left accent stripes */}
-      <div className="absolute top-0 left-[5%] bottom-0 w-[120px] md:w-[180px] overflow-hidden pointer-events-none opacity-[0.2]">
-        <div className="absolute inset-0 flex gap-[3px]">
-          {Array.from({ length: 18 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-full rounded-full"
-              style={{
-                width: "3px",
-                background: `linear-gradient(180deg, transparent 10%, rgba(124,58,237,${0.02 + i * 0.008}) 40%, rgba(124,58,237,${0.05 + i * 0.01}) 60%, transparent 90%)`,
-              }}
-            />
-          ))}
+      {/* Full-width vertical gradient stripes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.55]">
+        <div className="absolute inset-0 flex justify-center gap-[4px]">
+          {Array.from({ length: 120 }).map((_, i) => {
+            const center = 60;
+            const dist = Math.abs(i - center);
+            const intensity = Math.max(0, 1 - dist / center);
+            return (
+              <div
+                key={i}
+                className="h-full shrink-0 rounded-full"
+                style={{
+                  width: "3px",
+                  background: `linear-gradient(180deg, transparent 0%, rgba(124,58,237,${(0.04 + intensity * 0.12).toFixed(3)}) 25%, rgba(124,58,237,${(0.08 + intensity * 0.18).toFixed(3)}) 50%, rgba(124,58,237,${(0.04 + intensity * 0.12).toFixed(3)}) 75%, transparent 100%)`,
+                }}
+              />
+            );
+          })}
         </div>
       </div>
 
