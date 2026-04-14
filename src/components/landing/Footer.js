@@ -13,7 +13,7 @@ const footerLinks = {
     { name: "Sentiment Matrix", href: "/app/sentiment" },
   ],
   Community: [
-    { name: "Twitter / X", href: "https://x.com" },
+    { name: "Twitter / X", href: "https://x.com/intelnode_ai" },
     { name: "BscScan", href: "#" },
   ],
 };
@@ -40,7 +40,7 @@ export default function Footer() {
             {/* Social links */}
             <div className="flex items-center gap-2">
               {[
-                { icon: RiTwitterXLine, href: "https://x.com", label: "Twitter" },
+                { icon: RiTwitterXLine, href: "https://x.com/intelnode_ai", label: "Twitter" },
                 { icon: SiBnbchain, href: "#", label: "BscScan" },
               ].map(s => (
                 <a
@@ -81,19 +81,10 @@ export default function Footer() {
             ))}
           </div>
         </div>
-
-        {/* ── Bottom bar ── */}
-        <div className="pt-6 border-t border-dashed border-[#E5E7EB] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="pt-6 border-t border-dashed border-[#E5E7EB] flex items-center justify-center gap-4">
           <p className="text-[#9CA3AF] text-[12px] font-medium">
             © {currentYear} IntelNode. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            {["Privacy Policy", "Terms of Service"].map(t => (
-              <Link key={t} href="#" className="text-[#9CA3AF] text-[12px] font-medium hover:text-[#111827] transition-colors">
-                {t}
-              </Link>
-            ))}
-          </div>
         </div>
       </div>
     </footer>
