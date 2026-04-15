@@ -63,7 +63,7 @@ export default function CTA() {
             </Link>
 
             <Link
-              href="#features"
+              href="https://intel-node.gitbook.io/intel-node-docs" target="_blank"
               className="group inline-flex items-center justify-center gap-2.5 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#111827] bg-white border border-dashed border-[#D1D5DB] rounded-2xl transition-all duration-300 hover:border-[#111827] hover:bg-[#FAFBFC] active:scale-[0.98]"
               style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}
             >
