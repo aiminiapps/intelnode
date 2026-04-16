@@ -24,7 +24,9 @@ export const metadata = {
     siteName: "IntelNode",
     images: [
       {
-        url: "/og.png",
+        url: "https://www.intel-node.xyz/og.png",
+        secureUrl: "https://www.intel-node.xyz/og.png",
+        type: "image/png",
         width: 1200,
         height: 630,
         alt: "IntelNode Intelligence Engine",
@@ -39,7 +41,14 @@ export const metadata = {
     description: "Institution-grade crypto research powered by AI. Automated analytics, signal intelligence, and gated research reports.",
     creator: "@intelnode_ai",
     site: "@intelnode_ai",
-    images: ["/og.png"],
+    images: [
+      {
+        url: "https://www.intel-node.xyz/og.png",
+        width: 1200,
+        height: 630,
+        alt: "IntelNode Intelligence Engine",
+      },
+    ],
   },
   alternates: {
     canonical: "https://www.intel-node.xyz",
