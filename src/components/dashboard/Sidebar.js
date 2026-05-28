@@ -310,7 +310,7 @@ export default function Sidebar() {
               {/* Action Buttons */}
               <div className="flex items-center gap-2">
                 <a
-                  href="https://x.com/intelnode"
+                  href="https://x.com/intelnode_ai"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-[7px] rounded-md text-[11px] font-semibold text-white/70 bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white transition-all duration-200"

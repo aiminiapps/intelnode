@@ -13,7 +13,7 @@ export const NAV_ITEMS = [
   { name: "Flow Map", href: "/app/flow", icon: RiNodeTree },
   { name: "Portfolio", href: "/app/portfolio", icon: RiBriefcaseLine },
   { name: "Quests", href: "/app/quests", icon: RiTaskLine },
-  { name: "Wallets", href: "/app/wallets", icon: RiWallet3Line },
+  // { name: "Wallets", href: "/app/wallets", icon: RiWallet3Line },
   { name: "Alerts", href: "/app/alerts", icon: RiNotification3Line },
 ];
 
