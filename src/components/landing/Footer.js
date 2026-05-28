@@ -14,7 +14,7 @@ const footerLinks = {
   ],
   Community: [
     { name: "Twitter / X", href: "https://x.com/intelnode_ai" },
-    { name: "BscScan", href: "#" },
+    { name: "BscScan", href: "https://bscscan.com/token/0xc28bF4b57044939d8FFcCa056c6C868E69bE62d4" },
   ],
 };
 
