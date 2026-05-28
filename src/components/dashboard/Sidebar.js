@@ -319,7 +319,7 @@ export default function Sidebar() {
                   Follow
                 </a>
                 <a
-                  href="https://bscscan.com"
+                  href="https://bscscan.com/token/0xc28bF4b57044939d8FFcCa056c6C868E69bE62d4"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-[7px] rounded-md text-[11px] font-semibold text-[#111827] bg-white hover:bg-white/90 transition-all duration-200"
