@@ -41,7 +41,7 @@ export default function Footer() {
             <div className="flex items-center gap-2">
               {[
                 { icon: RiTwitterXLine, href: "https://x.com/intelnode_ai", label: "Twitter" },
-                { icon: SiBnbchain, href: "#", label: "BscScan" },
+                { icon: SiBnbchain, href: "https://bscscan.com/token/0xc28bF4b57044939d8FFcCa056c6C868E69bE62d4", label: "BscScan" },
               ].map(s => (
                 <a
                   key={s.label}
