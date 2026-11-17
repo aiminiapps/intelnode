@@ -65,7 +65,7 @@ const jsonLd = {
       url: "https://www.intel-node.xyz",
       logo: "https://www.intel-node.xyz/agent.png",
       sameAs: [
-        "https://x.com/intelnode_ai",
+        "https://x.com/Intel_NodeAI",
       ]
     },
     {

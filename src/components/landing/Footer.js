@@ -13,7 +13,7 @@ const footerLinks = {
     { name: "Sentiment Matrix", href: "/app/sentiment" },
   ],
   Community: [
-    { name: "Twitter / X", href: "https://x.com/intelnode_ai" },
+    { name: "Twitter / X", href: "https://x.com/Intel_NodeAI" },
     { name: "BscScan", href: "https://bscscan.com/token/0xc28bF4b57044939d8FFcCa056c6C868E69bE62d4" },
   ],
 };
@@ -40,7 +40,7 @@ export default function Footer() {
             {/* Social links */}
             <div className="flex items-center gap-2">
               {[
-                { icon: RiTwitterXLine, href: "https://x.com/intelnode_ai", label: "Twitter" },
+                { icon: RiTwitterXLine, href: "https://x.com/Intel_NodeAI", label: "Twitter" },
                 { icon: SiBnbchain, href: "https://bscscan.com/token/0xc28bF4b57044939d8FFcCa056c6C868E69bE62d4", label: "BscScan" },
               ].map(s => (
                 <a
